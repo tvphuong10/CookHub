@@ -3,7 +3,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
 from .models import User, Post
-from  .forms import RegistrationForm
+from .forms import RegistrationForm
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 
@@ -11,7 +12,10 @@ from  .forms import RegistrationForm
 def home(req):
     user_ = ''
     if req.user.username:
-        user_ = User.objects.get(username=req.user.username)
+        try:
+            user_ = User.objects.get(username=req.user.username)
+        except ObjectDoesNotExist:
+            return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
     post_ = Post.objects.all()
     context = {"user_": user_, "posts": post_, "media_url": settings.MEDIA_URL}
     return render(req, 'Hub/home.html', context)

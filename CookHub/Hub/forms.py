@@ -2,6 +2,7 @@ from django import forms
 import re
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from .models import User as User_
 
 
 class RegistrationForm(forms.Form):  # form đăng ký tài khoản mới
@@ -29,3 +30,7 @@ class RegistrationForm(forms.Form):  # form đăng ký tài khoản mới
 
     def save(self): # lưu tài khoản vào cơ sở dữ liệu
         User.objects.create_user(username=self.cleaned_data['username'], password=self.cleaned_data['password1'])
+        u = User_()
+        u.username = self.cleaned_data['username']
+        u.sign = ''
+        u.save()
