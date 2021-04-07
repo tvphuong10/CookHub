@@ -156,11 +156,36 @@ nav-link:hover{
 .hero{
     width: 100%;
     height: 100vh;
-    background: url("/static/Hub/resources/hero.jpg") center no-repeat;
+    background: url(/static/Hub/resources/hero.jpg) center no-repeat;
     background-size: cover;
     display: flex;
     align-items: center;
     text-align: center;
+}
+
+.post{
+    width: 100%;
+    background: #e3e9ff;
+    align-items: center;
+    text-align: center;
+}
+
+.post input{
+    margin-bottom: 20px;
+    border: none;
+    width: 80%;
+    border-bottom: 1px solid #000066;
+    background: transparent;
+    outline: none;
+    height: 40px;
+    font-size: 16px;
+}
+
+.post div{
+    width: 70%;
+    background: #fff;
+    margin: auto;
+    box-shadow: 5px 5px 20px -5px rgba(0, 0, 0, 0.2);
 }
 
 .sub-headline{
@@ -933,4 +958,144 @@ footer{
 .product:hover .icons a{
     display: block;
     margin-bottom: 1rem;
+}
+
+.avatar{
+    width: 3rem;
+    height: 3rem;
+    top: -0.025rem;
+    background-color: #121212;
+    position: absolute;
+
+    /* transform: translateX(-50%); */
+    border-radius: 50%;
+}
+
+.favorite .fa {
+    font-size: 50px;
+    cursor: pointer;
+    user-select: none;
+    padding-top: 20px;
+}
+
+.favorite  .fa:hover {
+    color: darkblue;
+}
+
+.favorite  p {
+    font-size: 30px;
+}
+
+.user_avatar {
+	width: 65px;
+	height: 65px;
+    float: left;
+    clear: left;
+    margin-bottom: 10px;
+}
+
+.box-comment img {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+}
+
+.box-comment {
+	width: 65%;
+	height: 100%;
+	margin: 0 auto;
+	padding-left: 10px;
+}
+
+.box-comment .create_new_comment {
+    width: 100%;
+    padding: 20px 0;
+}
+
+.box-comment .create_new_comment .input_comment {
+    display: flex;
+    vertical-align: middle;
+    padding-left: 10px;
+    margin-top: 10px;
+    width: calc(100% - 75px);
+}
+
+.box-comment .create_new_comment .input_comment input[type="text"] {
+    width: 100%;
+    font-weight: 300;
+    font-size: 1.3rem;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid lighten(GREY, 15%);
+}
+
+.box-comment .create_new_comment .input_comment input[type="text"] :focus {
+    outline: none;
+    border-bottom: 2px solid lighten(GREY, 10%);
+}
+
+.comment_body {
+    display: flex;
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+.comment_toolbar {
+    width: 100%;
+}
+.comment_toolbar ul {
+    list-style-type: none;
+    padding-left: 75px;
+    font-size: 0;
+}
+.comment_toolbar ul li {
+    display: inline-block;
+    padding: 5px;
+    font-size: 1.3rem;
+    color: lighten(GREY, 5%);
+}
+
+.comment_toolbar ul li:hover {
+    cursor: pointer;
+}
+
+.comment_toolbar .comment_details {
+    font-size: 14;
+}
+
+.comment_toolbar .comment_tools {
+    display: inline-block;
+    vertical-align: middle;
+    width: 30%;
+    text-align: right;
+}
+
+.comment_toolbar .comment_tools li :hover {
+    color: GREY;
+}
+
+.user:hover{
+    color: BLUE;
+    text-decoration: underline;
+}
+
+.user_comment {
+    list-style-type: none;
+}
+
+.new_comment {
+    width: 100%;
+	height: auto;
+	padding: 20px 0;
+}
+
+.comment_body {
+    display: inline-block;
+    vertical-align: middle;
+    width: calc(100% - 75px);
+    min-height: 65px;
+    margin-left: 10px;
+    padding: 5px 10px;
+    font-size: .9rem;
+    border-bottom: 2px solid black;
 }

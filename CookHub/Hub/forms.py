@@ -34,3 +34,17 @@ class RegistrationForm(forms.Form):  # form đăng ký tài khoản mới
         u.username = self.cleaned_data['username']
         u.sign = ''
         u.save()
+
+
+class ChangeInformationForm(forms.ModelForm):
+    class Meta:
+        model = User_
+        fields = ['sign', 'image']
+
+
+class Create(forms.Form):
+    title = forms.CharField(label='Title', max_length=100)
+    image = forms.ImageField(label='Image', allow_empty_file=True)
+    description = forms.CharField(label='Description', max_length=300)
+    material = forms.CharField(label='material', max_length=300)
+

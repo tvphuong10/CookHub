@@ -12,15 +12,15 @@ class Post(models.Model): # lưu bài viết
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=300)
     material = models.CharField(max_length=300)
-    view = models.IntegerField
-    like = models.IntegerField
-    date = models.DateTimeField
+    views = models.IntegerField(default=0)
+    likes = models.IntegerField(default=0)
+    date = models.DateTimeField(auto_now_add=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class Comment(models.Model): # lưu bình luận
     body = models.CharField(max_length=400)
-    date = models.DateTimeField
+    date = models.DateTimeField(auto_now_add=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     post_id = models.ForeignKey(Post, on_delete=models.CASCADE)
 
@@ -30,6 +30,14 @@ class Step(models.Model): # lưu các bước làm
     image = models.ImageField(null=True, blank=True, upload_to="images/")
     post_id = models.ForeignKey(Post, on_delete=models.CASCADE)
 
+
 class Like(models.Model): # lưu các lượt thích
+    date = models.DateField(auto_now_add=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    post_id = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+
+class View(models.Model):
+    count = models.IntegerField(default=0)
+    date = models.DateField(auto_now_add=True)
     post_id = models.ForeignKey(Post, on_delete=models.CASCADE)

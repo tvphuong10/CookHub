@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="/static/Hub/styles.css">
 </head>
 <body>
-    <header>
+    <header style="position: fixed">
         <div class="container">
             <nav class="nav">
                 <div class="menu-toggle">
@@ -53,57 +53,27 @@
         </div>
     </header>
 
-    <section class="hero" id="hero">
-        <div class="wrapper" style="width:70%">
-            <div class="search-input">
-                <a href="" target="_blank" hidden></a>
-                <form method="post">
-                    {%csrf_token%}
-                    <input type="text" name="search" placeholder="Type to search..">
-                </form>
-                <div class="autocom-box">
-                <!-- here list are inserted from javascript -->
-                </div>
-                <div class="icon"><i class="fas fa-search"></i></div>
-            </div>
-          </div>
-    </section>
-
-    <section class="section featured">
-        <div class="title">
-            <h1>Featured Recipes</h1>
+    <section class = "post">
+        <div>
+            <form method="post">
+                {%csrf_token%}
+                <input type="text" name="search" placeholder="Type to search..">
+            </form>
         </div>
-
-        <div class="product-center container">
-            {% for d in posts %}
-
-            <div class="product">
-                <div class="product-header">
-                    <img src="{{media_url}}{{ d.image }}" alt="">
-                    <ul class="icons">
-                        {% if user.username %}
-                        <span><a href="/like-post/{{d.id}}/{{user_.id}}/home" class="far fa-heart"></a></span>
-                        <span><i class="far fa-comments"></i></span>
-                        {% endif %}
-                        <span><i class="fas fa-share"></i></span>
-                    </ul>
-                </div>
-                <div class="product-footer">
-                    <a href="/{{d.id}}">
-                        <h3>{{d.title}}</h3>
-                    </a>
-
-                    <div class="rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h4 class="price">{{d.date}}</h4>
-                </div>
+        <p style="font-size: 40px;">Search results for <b>{{search}}</b></p>
+        <p style="font-size: 20px; color: #ccc"><i>{{len}} results</i></p>
+        <br><br>
+        <div>
+            {% for post in posts %}
+            <div style="width: 60%; box-shadow: 0px 0px 0px 0px;">
+                <a style="font-size: 40px;" href="/{{post.id}}">{{post.title}}</a>
+                <p style="font-size: 20px;">{{post.description}}</p>
+                <p style="font-size: 20px;">{{post.material}}</p>
             </div>
-
+            <img src="{{media_url}}{{ post.image }}" alt="img"
+                 style="width:25%;
+                 height:auto;
+                 border-radius: 2%;">
             {% endfor %}
         </div>
     </section>
