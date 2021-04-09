@@ -12,11 +12,11 @@
     <div id="wrapper">
         <div class="invitation">
             <div>
-                <input type="text" style="font-size: 40px; border: none;" placeholder="Title">
-                <br>
-                <input type="text" style="font-size: 20px; border: none;" placeholder="Description">
+                <input type="text" style="font-size: 40px; border: none; color: #575757" value="{{post.title}}">
                 <br><br>
-                <input type="text" style="font-size: 20px; border: none;" placeholder="Material">
+                <input type="text" style="font-size: 20px; border: none; color: #575757" value="{{post.description}}">
+                <br><br>
+                <input type="text" style="font-size: 20px; border: none; color: #575757" value="{{post.material}}">
             </div>
             <header id="header">
                 <h1>Your steps</h1>
@@ -33,20 +33,15 @@
             </div>  -->
 
                 <ul id="invitedList">
+                    {% for step in steps %}
                     <li>
-                        <span>B1 dun nuoc</span>
+                        <span>{{step.body}}</span>
                         <label>Confirmed<input type="checkbox"></label>
                         <button>edit</button>
                         <input type="file"></button>
                         <button>remove</button>
                     </li>
-                    <li>
-                        <span>B2 Uong nuoc</span>
-                        <label>Confirmed<input type="checkbox"></label>
-                        <button>edit</button>
-                        <input type="file"></button>
-                        <button>remove</button>
-                    </li>
+                    {% endfor %}
                 </ul>
             </main>
         </div>

@@ -10,5 +10,6 @@ urlpatterns = [
     path('create/', views.create),
     path('<int:id>', views.PostView.as_view()),
     path('user/', views.EditProfile.as_view()),
-    path('like-post/<int:id>/<int:user_id>/<slug:next>', views.like)
+    path('like-post/<int:id>/<int:user_id>/<slug:next>', views.like),
+    path('edit/<int:id>', views.EditPost.as_view())
 ]

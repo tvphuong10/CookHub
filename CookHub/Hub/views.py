@@ -92,8 +92,9 @@ class EditProfile(ViewBase):
         if user_ == -1 or user_ == 0:
             return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
         form = ChangeInformationForm(instance=user_)
+        post_ = Post.objects.filter(user_id=user_)
         return render(req, 'Hub/change_information.html',
-                      {'form': form, 'user_': user_, "media_url": settings.MEDIA_URL})
+                      {'form': form, 'user_': user_, 'posts': post_, "media_url": settings.MEDIA_URL})
 
     def post(self, req):
         user_ = get_user(req)
@@ -104,6 +105,15 @@ class EditProfile(ViewBase):
             form.save()
             return HttpResponseRedirect('/')
 
+class EditPost(ViewBase):
+    def get(self, req, id):
+        user_ = get_user(req)
+        if user_ == -1 or user_ == 0:
+            return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
+        form = ChangeInformationForm(instance=user_)
+        post_ = Post.objects.get(id=id)
+        steps = Step.objects.filter(post_id=post_)
+        return render(req, 'Hub/edit_post.html', {"post": post_, "steps": steps})
 
 def create(req):
     if not req.user.username:
