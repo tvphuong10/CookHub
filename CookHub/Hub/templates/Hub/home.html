@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="/static/Hub/styles.css">
 </head>
 <body>
-    <header>
+    <header style="position: fixed">
         <div class="container">
             <nav class="nav">
                 <div class="menu-toggle">
@@ -29,7 +29,11 @@
                         <a href="/create" class="nav-link">New Dish</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/user" class="nav-link">Hello {{user.username}}</a>
+                        <a href="/notification" class="nav-link">notifications<i class="fas fa-circle" style="color:red"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/user_page/{{user_.id}}" class="nav-link">Hello {{user.username}} </a>
+
                     </li>
                     <li class="nav-item">
                         <img src="{{media_url}}{{ user_.image }}" alt="" style="width:auto; height:40px; border-radius: 50%;">
@@ -69,14 +73,72 @@
 
     <section class="section featured">
         <div class="title">
-            <h1>Posts</h1>
+            <h1>Trending</h1>
         </div>
 
         <div class="product-center container">
-            {% for d in posts %}
+            {% for d in offers %}
 
             <div class="product">
                 <div class="product-header">
+                    <img src="{{media_url}}{{ d.post_id.image }}" alt="">
+                    <ul class="icons">
+                        {% if user.username %}
+                        <span><a href="/like-post/{{d.post_id.id}}/{{user_.id}}/home" class="far fa-heart"></a></span>
+                        <span><i class="far fa-comments"></i></span>
+                        {% endif %}
+                        <span><i class="fas fa-share"></i></span>
+                    </ul>
+                </div>
+                <div class="product-footer">
+                    <a href="/{{d.post_id.id}}">
+                        <h3>{{d.post_id.title}}</h3>
+                    </a>
+
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4 class="price">{{d.post_id.date}}</h4>
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="section featured">
+        <div class="title">
+            <h1>Feature authors</h1>
+        </div>
+
+        <div class="product-center container">
+            {% for u in users %}
+
+            <div class="product" style="height:auto; width:auto;">
+                <div class="product-header" style="height:100px; width:auto;">
+                    <img src="{{media_url}}{{ u.image }}" alt="" style="width:auto;
+                     height:100px;
+                     border-radius:50%;
+                     box-shadow:5px 5px 20px -5px rgba(0, 0, 0, 0.5);">
+                </div>
+                <a style="font-size:20px" href="/user_page/{{u.id}}">{{u.username}}</a>
+            </div>
+
+            {% endfor %}
+        </div>
+    </section>
+
+
+    <section class="section featured" style="background: #e3e9ff;">
+        <div class="product-center container" style="grid-template-columns: repeat(auto-fit,minmax(20rem, 1fr));">
+            {% for d in posts %}
+
+            <div class="product" style="height: 35rem;">
+                <div class="product-header" style="height: 25rem;">
                     <img src="{{media_url}}{{ d.image }}" alt="">
                     <ul class="icons">
                         {% if user.username %}
@@ -90,15 +152,6 @@
                     <a href="/{{d.id}}">
                         <h3>{{d.title}}</h3>
                     </a>
-
-                    <div class="rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h4 class="price">{{d.date}}</h4>
                 </div>
             </div>
 
@@ -106,8 +159,19 @@
         </div>
     </section>
 
+    <footer>
+        <div style="width: 50%; display: inline-block;">
+            <h1>™ 2021 - Bản quyền của 10xu studio - K64 CC</h1>
+            <h2>Đại học Công nghệ - Đại học Quốc gia Hà Nội</h2>
+        </div>
+        <div style="width: 49%; display: inline-block;">
+            <h1>Liên hệ với chúng tôi</h1>
+            <h3><b>Hotline: 1902-0397</b></h3>
+            <h3>Email:<a>tvphuong2@yahoo.com.vn</a></h3>
+            <h3>Facebook:<a>https://www.facebook.com/huyen.thoai.2001/</a></h3>
+        </div>
+    </footer>
 
     <script src="/static/Hub/main.js"></script>
-    <script src="/static/Hub/suggestions.js"></script>
 
 </body>

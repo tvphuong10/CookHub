@@ -1,0 +1,45 @@
+{% extends "Hub/admin_base.html" %}
+
+{% block content %}
+<div style="font-size: 20px;">
+    <h1 style="font-size: 50px; color: #4054ad">Posts</h1>
+        <div class="search-input">
+                <br>
+            <form method="post">
+                {%csrf_token%}
+                <input type="text" name="search" style="width: 90%" placeholder="Type to search..">
+            </form>
+        </div>
+    <section style="display: line-block;">
+        <div class="product-center container" style="grid-template-columns: repeat(auto-fit,minmax(20rem, 1fr));">
+            <div class="product" style="height: 32rem; background: #4054ad">
+                <div class="product-header" style="height: 25rem;">
+                    <img src="{{media_url}}{{ d.image }}" alt="">
+                    <ul class="icons" style="left:5%;">
+                        <h1 style="color: #fff">Yorovy</h1>
+                        <h1 style="color: #fff">Like: 3</h1>
+                        <p style="color: #fff">View: 12</p>
+                    </ul>
+                </div>
+                <div class="product-footer">
+                    <a href="/admin_post/1" style="color: #fff">
+                        <h3>Trứng luộc</h3>
+                    </a>
+                </div>
+            </div>
+
+            <div class="product">
+                <h1>Trứng luộc</h1>
+                <h1>Like: 3</h1>
+                <p>View: 12</p>
+            </div>
+
+            <div class="product">
+                <h1>Trứng luộc</h1>
+                <h1>Like: 3</h1>
+                <p>View: 12</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

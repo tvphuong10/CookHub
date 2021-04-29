@@ -1,0 +1,48 @@
+{% extends "Hub/admin_base.html" %}
+
+{% block content %}
+{{img_data | safe}}
+<div style="font-size: 20px">
+    <b>Like:</b> {{like_num}}
+    <br>
+    <b>Comment:</b> {{comment_num}}
+</div><br>
+<h1 style="font-size: 40px; color:#4054ad">Trending</h1>
+<section style="display: line-block;">
+    <div class="product-center container" style="grid-template-columns: repeat(auto-fit,minmax(20rem, 1fr));">
+        <div class="product" style="height: 32rem; background: #4054ad">
+            <div class="product-header" style="height: 25rem;">
+                <img src="{{media_url}}{{ d.image }}" alt="">
+                <ul class="icons" style="left:5%; font-size:13px">
+                    <h1 style="color: #fff">Yorovy</h1>
+                    <h1 style="color: #fff">Like: 3</h1>
+                    <p style="color: #fff">View: 12</p>
+                </ul>
+            </div>
+            <div class="product-footer">
+                <a href="/admin_post/1" style="color: #fff">
+                    <h3>Trứng luộc</h3>
+                </a>
+            </div>
+        </div>
+
+        <div class="product" style="height: 32rem; background: #4054ad">
+            <div class="product-header" style="height: 25rem;">
+                <img src="{{media_url}}{{ d.image }}" alt="">
+                <ul class="icons" style="left:5%;">
+                    <h1 style="color: #fff">Yorovy</h1>
+                    <h1 style="color: #fff">Like: 3</h1>
+                    <p style="color: #fff">View: 12</p>
+                </ul>
+            </div>
+            <div class="product-footer">
+                <a href="/admin_post/1" style="color: #fff">
+                    <h3>Trứng luộc</h3>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<center><i style="width:100%">Biểu đồ lượt xem</i></center>
+{% endblock %}

@@ -29,7 +29,10 @@
                         <a href="/create" class="nav-link">New Dish</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/user" class="nav-link">Hello {{user.username}}</a>
+                        <a href="/notification" class="nav-link">notifications<i class="fas fa-circle" style="color:red"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/user_page/{{user_.id}}" class="nav-link">Hello {{user.username}}</a>
                     </li>
                     <li class="nav-item">
                         <img src="{{media_url}}{{ user_.image }}" alt="" style="width:auto; height:40px; border-radius: 50%;">
@@ -98,6 +101,15 @@
                     {{like_num}}
                 </a>
             {% endif %}
+            {% if enable_edit %}
+                <a href="/edit/{{post.id}}" class="button_scroll"> &ensp; &ensp; &ensp;
+                    <p class="far fa-edit" style="font-size: 30px;"></p>
+                </a>
+            {% else %}
+                <a href="/report/{{post.id}}" class="button_scroll"> &ensp; &ensp;
+                    <p class="far fa-flag" style="font-size: 30px;"></p>
+                </a>
+            {% endif %}
         {% endif %}
         <div>
             <form method="post">
@@ -111,6 +123,54 @@
             </form>
         </div>
     </section>
+
+    <section class="section featured" style="background: #e3e9ff;">
+        <div class="product-center container" style="width: 90%">
+            {% for d in offers %}
+
+            <div class="product"  style="height: 38rem;">
+                <div class="product-header" style="height: 28rem;">
+                    <img src="{{media_url}}{{ d.image }}" alt="">
+                    <ul class="icons">
+                        {% if user.username %}
+                        <span><a href="/like-post/{{d.id}}/{{user_.id}}/home" class="far fa-heart"></a></span>
+                        <span><i class="far fa-comments"></i></span>
+                        {% endif %}
+                        <span><i class="fas fa-share"></i></span>
+                    </ul>
+                </div>
+                <div class="product-footer">
+                    <a href="/{{d.id}}">
+                        <h3>{{d.title}}</h3>
+                    </a>
+
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4 class="price">{{d.date}}</h4>
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+    </section>
+
+    <footer>
+        <div style="width: 50%; display: inline-block;">
+            <h1>™ 2021 - Bản quyền của 10xu studio - K64 CC</h1>
+            <h2>Đại học Công nghệ - Đại học Quốc gia Hà Nội</h2>
+        </div>
+        <div style="width: 49%; display: inline-block;">
+            <h1>Liên hệ với chúng tôi</h1>
+            <h3><b>Hotline: 1902-0397</b></h3>
+            <h3>Email:<a>tvphuong2@yahoo.com.vn</a></h3>
+            <h3>Facebook:<a>https://www.facebook.com/huyen.thoai.2001/</a></h3>
+        </div>
+    </footer>
 
     <script src="/static/Hub/main.js"></script>
 

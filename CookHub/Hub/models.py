@@ -60,3 +60,14 @@ class View(models.Model):
     def __str__(self):
         return self.date
 
+
+class Offer(models.Model):
+    post_id = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+
+class Messenger(models.Model):
+    post_id = models.IntegerField(default=0)
+    body = models.CharField(max_length=400)
+    date = models.DateTimeField(auto_now_add=True)
+    user_send = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
+    user_receive = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')

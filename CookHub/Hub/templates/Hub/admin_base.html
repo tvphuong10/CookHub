@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <title>Admin site</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <link rel="stylesheet" href="/static/Hub/styles.css">
+</head>
+<body>
+    <header style="position: absolute; width: 15%; height: 100%; top: 0; left: 0;
+        background-image: linear-gradient(to bottom,#b6b9f0,transparent);
+        ">
+        <div style=" height: 100%;">
+            <div style="text-align: center; height: 40%;">
+                <center><img src="{{media_url}}{{ user_.image }}"
+                             class="responsive-img"
+                             style="box-shadow:0px 5px 5px rgba(0, 0, 0, 0.5);"/>
+                </center>
+                <h1 style="font-size: 32px;">{{user_.username}}</h1>
+                <h1 style="font-size: 16px;"><i>{{user_.sign}}</i></h1>
+            </div>
+
+            <div style="height: 60%; font-size: 12px;">
+                <h2> &ensp; -------</h2>
+                {% if select == 0 %} <h2 style="background: #fff;"><a href="/admin_site"> &ensp; General</a></h2>
+                {% else %}          <h2><a href="/admin_site"> &ensp; General</a></h2>
+                {% endif %}
+                {% if select == 1 %} <h2 style="background: #fff;"><a href="/admin_notify"> &ensp; Notification</a></h2>
+                {% else %}          <h2><a href="/admin_notify"> &ensp; Notification</a></h2>
+                {% endif %}
+                {% if select == 2 %} <h2 style="background: #fff;"><a href="/admin_manager"> &ensp; Posts manager</a></h2>
+                {% else %}          <h2><a href="/admin_manager"> &ensp; Posts manager</a></h2>
+                {% endif %}
+                {% if select == 3 %} <h2 style="background: #fff;"><a> &ensp; Post</a></h2>
+                {% else %}          <h2><a> &ensp; Post</a></h2>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    <div style=" display:flex; height: 100ph;">
+       <div  style="width:20%"></div>
+       <div style="width:80%; display:inline-block;">
+            {% block content %}
+
+            {% endblock %}
+       </div>
+    </div>
+</body>
+</html>

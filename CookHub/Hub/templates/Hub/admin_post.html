@@ -1,0 +1,23 @@
+{% extends "Hub/admin_base.html" %}
+
+{% block content %}
+<div style="font-size: 20px;">
+    <h1 style="font-size: 50px"><a href="/1">{{post.title}}</a></h1>
+    <br>
+    <h3>View graph:</h3>
+    {{img_data | safe}}
+    <div style="font-size: 17px">
+        <h3>Total likes: {{like_num}}</h3>
+        <h3>Total views: {{view_num}}</h3>
+    </div>
+    <br>
+    <h3>Comments:</h3>
+    <div style="font-size: 13px">
+        {% for cmt in comments %}
+        <p><b> &ensp;  &ensp; &ensp;{{cmt.user_id.username}} :</b> {{cmt.body}}</p>
+        {% endfor %}
+    </div>
+    <button>Offer</button>
+    <button>Delete this post</button>
+</div>
+{% endblock %}

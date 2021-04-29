@@ -1,0 +1,18 @@
+{% extends "Hub/admin_base.html" %}
+
+{% block content %}
+<div style="font-size: 20px;">
+    <h1 style="font-size: 50px; color: #4054ad">Notifications</h1>
+    <section>
+        {% for m in mess %}
+            <br>
+            <a style="font-size: 20px; color: #545454" href="/admin_post/{{m.post_id}}">
+                <i>{{m.date}}</i> &ensp; &ensp;
+                <b>{{m.user_send.username}}</b>
+                to <b>{{m.user_receive.username}}</b> &ensp; &ensp;
+                : {{m.body}}
+            </a>
+        {% endfor %}
+    </section>
+</div>
+{% endblock %}

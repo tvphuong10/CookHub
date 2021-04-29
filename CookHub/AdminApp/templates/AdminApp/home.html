@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <title>Admin site</title>
+</head>
+<body>
+  <div>
+       <div>
+           <center><img src="{{media_url}}{{ user_.image }}" class="responsive-img" style="max-height:150px"/></center>
+       </div>
+       <div>
+       {% block content %}
+
+       {% endblock %}
+       </div>
+  </div>
+</body>
+</html>

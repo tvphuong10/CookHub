@@ -28,7 +28,10 @@
                         <a href="/create" class="nav-link">New Dish</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/user" class="nav-link active">Hello {{user.username}}</a>
+                        <a href="/notification" class="nav-link">notifications<i class="fas fa-circle" style="color:red"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/user_page/{{user_.id}}" class="nav-link active">Hello {{user.username}}</a>
                     </li>
                     <li class="nav-item">
                         <img src="{{media_url}}{{ user_.image }}" alt="" style="width:auto; height:40px;  border-radius: 50%;">
@@ -43,30 +46,14 @@
 
     <section class="hero" id="hero">
         <div class="loginbox">
-        <h1 class="name-box">
-            <img src="{{media_url}}{{ user_.image }}" alt="" style="border-radius: 50%;">
-        </h1>
-        <form action="." method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{form.as_p}}
-            <input type="submit" value="Save"/>
-        </form>
-        </div>
-    </section>
-
-    <section style="background: #e3e9ff;">
-        <div>
-            {% for post in posts %}
-            <div style="width: 60%;">
-                <a style="font-size: 40px;" href="/edit/{{post.id}}">{{post.title}}</a>
-                <p style="font-size: 20px;">{{post.description}}</p>
-                <p style="font-size: 20px;">{{post.material}}</p>
-            </div>
-            <img src="{{media_url}}{{ post.image }}" alt="img"
-                 style="width:25%;
-                 height:auto;
-                 border-radius: 2%;">
-            {% endfor %}
+            <h1 class="name-box">
+                <img src="{{media_url}}{{ user_.image }}" alt="" style="border-radius: 50%;">
+            </h1>
+            <form action="." method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form.as_p}}
+                <input type="submit" value="Save"/>
+            </form>
         </div>
     </section>
     <script src="/static/Hub/main.js"></script>

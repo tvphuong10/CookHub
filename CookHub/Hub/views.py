@@ -2,11 +2,13 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout, decorators
 from django.conf import settings
-from .models import User, Post, Like, Step, Comment, View
+from .models import *
 from .forms import RegistrationForm, ChangeInformationForm
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import date
 from django.views import View as ViewBase
+from plotly.offline import plot
+from plotly.graph_objs import Scatter
 
 # req là thông điệp từ client truyền vào
 
@@ -26,8 +28,10 @@ class HomeView(ViewBase):
         if user_ == -1:
             return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
 
+        offer_ = Offer.objects.all()
+        users = User.objects.all()
         post_ = Post.objects.all()  # lấy toàn bộ model Post
-        context = {"user_": user_, "posts": post_,
+        context = {"user_": user_, "posts": post_, "offers": offer_, 'users': users,
                    "media_url": settings.MEDIA_URL}  # tạo 1 biến lưu dữ liệu truyền vào file html
         return render(req, 'Hub/home.html', context)
 
@@ -93,8 +97,9 @@ class EditProfile(ViewBase):
             return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
         form = ChangeInformationForm(instance=user_)
         post_ = Post.objects.filter(user_id=user_)
+        mess = Messenger.objects.filter(user_receive=user_)
         return render(req, 'Hub/change_information.html',
-                      {'form': form, 'user_': user_, 'posts': post_, "media_url": settings.MEDIA_URL})
+                      {'form': form, 'user_': user_, 'posts': post_, 'mess': mess, "media_url": settings.MEDIA_URL})
 
     def post(self, req):
         user_ = get_user(req)
@@ -149,6 +154,11 @@ class PostView(ViewBase):
         steps = Step.objects.filter(post_id=post_)
         lk_num = Like.objects.filter(post_id=post_.id).count()
         cmt = Comment.objects.filter(post_id=post_)
+        offers = Post.objects.filter(user_id=post_.user_id)
+        enable_edit = False;
+        if post_.user_id == user_:
+            enable_edit = True
+
         context = {
             "user_": user_,
             "post": post_,
@@ -156,6 +166,8 @@ class PostView(ViewBase):
             "like": lk,
             "like_num": lk_num,
             "comments": cmt,
+            "offers": offers,
+            "enable_edit": enable_edit,
             "media_url": settings.MEDIA_URL
         }
         return render(req, 'Hub/post.html', context)
@@ -200,3 +212,167 @@ def like(req, id, user_id, next):
                 return HttpResponseRedirect('/' + next)
         except ObjectDoesNotExist:
             return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
+
+
+class Report(ViewBase):
+    def get(self, req, id):
+        user_ = get_user(req)
+        if user_ == -1 or user_ == 0:
+            return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
+
+        return render(req, 'Hub/report.html', {"user_": user_, "media_url": settings.MEDIA_URL})
+
+    def post(self, req, id):
+        user_ = get_user(req)
+        if user_ == -1 or user_ == 0:
+            return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
+
+        post_ = Post.objects.get(id=id)
+        user2_ = post_.user_id
+        body = req.POST.get('report')
+        messenger = Messenger()
+        messenger.post_id = post_.id
+        messenger.user_receive = user2_
+        messenger.user_send = user_
+        messenger.body = body
+        messenger.save()
+
+        return HttpResponseRedirect('/')
+
+
+class Notifications(ViewBase):
+    def get(self, req):
+        user_ = get_user(req)
+        if user_ == -1 or user_ == 0:
+            return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
+
+        mess = Messenger.objects.filter(user_receive=user_)
+        return render(req, 'Hub/notifications.html',
+                      {"user_": user_, 'mess': mess, "media_url": settings.MEDIA_URL})
+
+
+class User_page(ViewBase):
+    def get(self, req, id):
+        user_ = get_user(req)
+        if user_ == -1:
+            return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
+
+        user2 = User.objects.get(id=id)
+        guess = req.user.username != user2.username
+        form = ''
+        if user_ != 0:
+            form = ChangeInformationForm(instance=user_)
+        post_ = Post.objects.filter(user_id=user2)
+        post_count = len(post_)
+        like_count = 0
+        view_count = 0
+        for p in post_:
+            like_count += len(Like.objects.filter(post_id=p))
+            views = View.objects.filter(post_id=p)
+            for v in views:
+                view_count += v.count
+
+        return render(req, 'Hub/user_page.html',
+                      {'form': form,
+                       'user_': user_,
+                       'user2': user2,
+                       'posts': post_,
+                       'guess': guess,
+                       'post_count': post_count,
+                       'like_count': like_count,
+                       'view_count': view_count,
+                       "media_url": settings.MEDIA_URL})
+
+
+class AdminSite(ViewBase):
+    def get(self, req):
+        user_ = get_user(req)
+        if user_ == -1 or user_ == 0:
+            return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
+
+        post_ = Post.objects.get(id=1)
+        view_ = View.objects.filter(post_id=post_)
+        x = []
+        y = []
+
+        for v in view_:
+            y.append(v.count)
+            x.append(v.date.strftime('%m/%d/%Y'))
+
+        lk_num = Like.objects.filter(post_id=post_).count()
+        cmt_num = Comment.objects.filter(post_id=post_).count()
+        plot_div = plot([Scatter(x=x, y=y,
+                                 mode='lines', name='test',
+                                 opacity=0.8)],
+                        output_type='div')
+        context = {"user_": user_,
+                   "select": 0,
+                   "post": post_,
+                   "like_num": lk_num,
+                   "comment_num": cmt_num,
+                   "img_data": plot_div,
+                   "media_url": settings.MEDIA_URL}
+        return render(req, 'Hub/admin_site.html', context)
+
+
+class AdminNotifications(ViewBase):
+    def get(self, req):
+        user_ = get_user(req)
+        if user_ == -1 or user_ == 0:
+            return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
+
+        mess = Messenger.objects.all()
+        return render(req, 'Hub/admin_notifications.html',
+                      {"user_": user_,
+                       "mess": mess,
+                       "select": 1,
+                       "media_url": settings.MEDIA_URL})
+
+
+class AdminPostsManager(ViewBase):
+    def get(self, req):
+        user_ = get_user(req)
+        if user_ == -1 or user_ == 0:
+            return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
+
+        return render(req, 'Hub/admin_manager.html',
+                      {"user_": user_,
+                       "select": 2,
+                       "media_url": settings.MEDIA_URL})
+
+
+class AdminPost(ViewBase):
+    def get(self, req, id):
+        user_ = get_user(req)
+        if user_ == -1 or user_ == 0:
+            return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
+
+        post_ = Post.objects.get(id=id)
+        view_ = View.objects.filter(post_id=post_)
+        x = []
+        y = []
+
+        for v in view_:
+            y.append(v.count)
+            x.append(v.date.strftime('%m/%d/%Y'))
+
+        lk_num = Like.objects.filter(post_id=post_).count()
+        views = View.objects.filter(post_id=post_)
+        view = 0
+        for v in views:
+            view += v.count
+        comments = Comment.objects.filter(post_id=post_)
+        plot_div = plot([Scatter(x=x, y=y,
+                                 mode='lines', name='test',
+                                 opacity=0.8)],
+                        output_type='div')
+
+        return render(req, 'Hub/admin_post.html',
+                      {"user_": user_,
+                       "select": 3,
+                       "post": post_,
+                       "comments": comments,
+                       "view_num": view,
+                       "like_num": lk_num,
+                       "img_data": plot_div,
+                       "media_url": settings.MEDIA_URL})
