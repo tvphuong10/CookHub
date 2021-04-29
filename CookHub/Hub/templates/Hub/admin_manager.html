@@ -12,33 +12,26 @@
         </div>
     <section style="display: line-block;">
         <div class="product-center container" style="grid-template-columns: repeat(auto-fit,minmax(20rem, 1fr));">
+
+            {% for post,like,view in posts %}
             <div class="product" style="height: 32rem; background: #4054ad">
                 <div class="product-header" style="height: 25rem;">
-                    <img src="{{media_url}}{{ d.image }}" alt="">
+                    <img src="{{media_url}}{{ post.image }}" alt="">
                     <ul class="icons" style="left:5%;">
-                        <h1 style="color: #fff">Yorovy</h1>
-                        <h1 style="color: #fff">Like: 3</h1>
-                        <p style="color: #fff">View: 12</p>
+                        <h1 style="color: #fff">{{post.user_id.username}}</h1>
+                        <br>
+                        <h3 style="color: #fff">Like: {{like}}</h3>
+                        <h3 style="color: #fff">View: {{view}}</h3>
                     </ul>
                 </div>
                 <div class="product-footer">
                     <a href="/admin_post/1" style="color: #fff">
-                        <h3>Trứng luộc</h3>
+                        <h3>{{post.title}}</h3>
                     </a>
                 </div>
             </div>
+            {% endfor %}
 
-            <div class="product">
-                <h1>Trứng luộc</h1>
-                <h1>Like: 3</h1>
-                <p>View: 12</p>
-            </div>
-
-            <div class="product">
-                <h1>Trứng luộc</h1>
-                <h1>Like: 3</h1>
-                <p>View: 12</p>
-            </div>
         </div>
     </section>
 </div>

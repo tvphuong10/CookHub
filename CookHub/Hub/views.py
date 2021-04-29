@@ -335,8 +335,20 @@ class AdminPostsManager(ViewBase):
         if user_ == -1 or user_ == 0:
             return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
 
+        posts = Post.objects.all()
+        lk_num = []
+        view_num = []
+        for p in posts:
+            lk_num.append(Like.objects.filter(post_id=p).count())
+            view_ = View.objects.filter(post_id=p)
+            v = 0
+            for i in view_:
+                v += i.count
+            view_num.append(v)
+
         return render(req, 'Hub/admin_manager.html',
                       {"user_": user_,
+                       "posts": zip(posts, lk_num, view_num),
                        "select": 2,
                        "media_url": settings.MEDIA_URL})
 
