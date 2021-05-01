@@ -5,7 +5,7 @@ from django.conf import settings
 from .models import *
 from .forms import RegistrationForm, ChangeInformationForm
 from django.core.exceptions import ObjectDoesNotExist
-from datetime import date
+from datetime import date, timedelta
 from django.views import View as ViewBase
 from plotly.offline import plot
 from plotly.graph_objs import Scatter
@@ -68,6 +68,13 @@ class LoginView(ViewBase):
             return render(req, 'Hub/login.html', {'error': 'username or password wrong'})
         login(req, user)
         return HttpResponseRedirect('/')
+
+
+class ForgotPassword(ViewBase):
+    def get(self,req):
+        if req.user.username:
+            return HttpResponseRedirect('/')
+        return render(req, 'Hub/forgot_pass.html', {'error': ''})
 
 
 class RegisterView(ViewBase):
@@ -290,17 +297,34 @@ class AdminSite(ViewBase):
         if user_ == -1 or user_ == 0:
             return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
 
+        total_view = 0
+        total_like = Like.objects.filter().count()
         post_ = Post.objects.get(id=1)
         view_ = View.objects.filter(post_id=post_)
         x = []
         y = []
 
-        for v in view_:
-            y.append(v.count)
-            x.append(v.date.strftime('%m/%d/%Y'))
+        for day in range(20):
+            x.append(date.today() - timedelta(days=day))
+            v = View.objects.filter(date=date.today() - timedelta(days=day))
+            view = 0
+            for v_ in v:
+                view += v_.count
 
-        lk_num = Like.objects.filter(post_id=post_).count()
-        cmt_num = Comment.objects.filter(post_id=post_).count()
+            total_view += view
+            y.append(view)
+
+        lk_num = []
+        view_num = []
+        posts = Offer.objects.all()
+        for p in posts:
+            lk_num.append(Like.objects.filter(post_id=p.post_id).count())
+            view_ = View.objects.filter(post_id=p.post_id)
+            v = 0
+            for i in view_:
+                v += i.count
+            view_num.append(v)
+
         plot_div = plot([Scatter(x=x, y=y,
                                  mode='lines', name='test',
                                  opacity=0.8)],
@@ -308,8 +332,9 @@ class AdminSite(ViewBase):
         context = {"user_": user_,
                    "select": 0,
                    "post": post_,
-                   "like_num": lk_num,
-                   "comment_num": cmt_num,
+                   "total_like": total_like,
+                   "total_view": total_view,
+                   "posts": zip(posts, lk_num, view_num),
                    "img_data": plot_div,
                    "media_url": settings.MEDIA_URL}
         return render(req, 'Hub/admin_site.html', context)

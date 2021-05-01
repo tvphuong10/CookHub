@@ -1,46 +1,34 @@
 {% extends "Hub/admin_base.html" %}
 
 {% block content %}
+<h1 style="font-size: 40px; color:#4054ad">Total Views:</h1>
 {{img_data | safe}}
 <div style="font-size: 20px">
-    <b>Like:</b> {{like_num}}
-    <br>
-    <b>Comment:</b> {{comment_num}}
+    <b>Total View:</b> {{total_view}}<br>
+    <b>Total Like:</b> {{total_like}}<br>
 </div><br>
 <h1 style="font-size: 40px; color:#4054ad">Trending</h1>
 <section style="display: line-block;">
     <div class="product-center container" style="grid-template-columns: repeat(auto-fit,minmax(20rem, 1fr));">
-        <div class="product" style="height: 32rem; background: #4054ad">
-            <div class="product-header" style="height: 25rem;">
-                <img src="{{media_url}}{{ d.image }}" alt="">
-                <ul class="icons" style="left:5%; font-size:13px">
-                    <h1 style="color: #fff">Yorovy</h1>
-                    <h1 style="color: #fff">Like: 3</h1>
-                    <p style="color: #fff">View: 12</p>
-                </ul>
-            </div>
-            <div class="product-footer">
-                <a href="/admin_post/1" style="color: #fff">
-                    <h3>Trứng luộc</h3>
-                </a>
-            </div>
-        </div>
 
-        <div class="product" style="height: 32rem; background: #4054ad">
-            <div class="product-header" style="height: 25rem;">
-                <img src="{{media_url}}{{ d.image }}" alt="">
-                <ul class="icons" style="left:5%;">
-                    <h1 style="color: #fff">Yorovy</h1>
-                    <h1 style="color: #fff">Like: 3</h1>
-                    <p style="color: #fff">View: 12</p>
-                </ul>
+        {% for post,like,view in posts %}
+            <div class="product" style="height: 32rem; background: #4054ad">
+                <div class="product-header" style="height: 25rem;">
+                    <img src="{{media_url}}{{ post.post_id.image }}" alt="">
+                    <ul class="icons" style="left:5%; font-size: 19px;">
+                        <h1 style="color: #fff">{{post.post_id.user_id.username}}</h1>
+                        <br>
+                        <h3 style="color: #fff">Like: {{like}}</h3>
+                        <h3 style="color: #fff">View: {{view}}</h3>
+                    </ul>
+                </div>
+                <div class="product-footer">
+                    <a href="/admin_post/1" style="color: #fff">
+                        <h3>{{post.post_id.title}}</h3>
+                    </a>
+                </div>
             </div>
-            <div class="product-footer">
-                <a href="/admin_post/1" style="color: #fff">
-                    <h3>Trứng luộc</h3>
-                </a>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 </section>
 

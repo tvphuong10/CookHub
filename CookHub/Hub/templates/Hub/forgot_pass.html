@@ -10,6 +10,7 @@
     <!--Scroll reveal CDN-->
     <script src="https://unpkg.com/scrollreveal"></script>
     <link rel="stylesheet" href="/static/Hub/styles.css">
+    <link rel="stylesheet" href="/static/Hub/forgot_password.css">
 </head>
 <body>
     <header>
@@ -37,25 +38,40 @@
 
     <section class="hero" id="hero">
         <div class="loginbox">
-        <h1 class="name-box">Login Here</h1>
-            <form method="POST">
-                {%csrf_token%}
-                <p>{{error}}</p>
-                <p>Username</p>
-                <input type="text" name="username" placeholder="Enter Username">
-                <p>Password</p>
-                <input type="password" name="password" placeholder="Enter Password">
-                <input type="submit" name="" value="Login">
-                <a href="/forgot_password">Forgot your password ?</a><br>
-                <a href="/register">Don't have an account ?</a><br>
-                <p>___________________________________</p>
-                <br><br>
-                <a href="#"><img src="/static/Hub/resources/face.png" style="border-radius:20px; height: 40px; width: 80%;"></a>
-                <a href="#"><img src="/static/Hub/resources/google.png" style="border-radius:20px; height: 40px; width: 80%;"></a>
+        <h1 class="name-box">Forgot password</h1>
+            <form>
+                <p>Email</p>
+                <input type="text" name="" placeholder="Enter Email">
+                <a href="" id="button" class="button">Confirm</a>
             </form>
         </div>
     </section>
 
+    <div class="bg-modal">
+        <div class="modal-content">
+            <div class="close">+</div>
+            <h1>Your Code</h1>
+            <Form action="">
+                <input type="text" placeholder="Code">
+                <a href="" id="button1" class="button">Confirm</a>
+            </Form>
+        </div>
+    </div>
+
+    <div class="bg-modal1">
+        <div class="modal-content1">
+            <div class="close1">+</div>
+            <h1>New Password</h1>
+            <Form action="">
+                <input type="password" placeholder="New password">
+                <input type="password" placeholder="Corfirm password">
+                <a href="/login" id="button2" class="button">Confirm</a>
+            </Form>
+        </div>
+    </div>
+
     <script src="/static/Hub/main.js"></script>
+    <script src="/static/Hub/forgotpassword.js"></script>
+
 
 </body>

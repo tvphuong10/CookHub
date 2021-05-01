@@ -5,6 +5,7 @@ urlpatterns = [
     path('', views.HomeView.as_view()), # tạo đường dẫn mặc định (trống) về home
     path('home', views.HomeView.as_view()),
     path('login/', views.LoginView.as_view()), # tạo đường dẫn login
+    path('forgot_password/', views.ForgotPassword.as_view()),
     path('logout/', views.logout_view), # tương tự
     path('register/', views.RegisterView.as_view()),
     path('create/', views.create),

@@ -2,7 +2,7 @@
 
 {% block content %}
 <div style="font-size: 20px;">
-    <h1 style="font-size: 50px"><a href="/1">{{post.title}}</a></h1>
+    <h1 style="font-size: 50px"><a href="/{{post.id}}">{{post.title}}</a></h1>
     <br>
     <h3>View graph:</h3>
     {{img_data | safe}}
