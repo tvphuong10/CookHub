@@ -17,7 +17,15 @@
         <p><b> &ensp;  &ensp; &ensp;{{cmt.user_id.username}} :</b> {{cmt.body}}</p>
         {% endfor %}
     </div>
-    <button>Offer</button>
-    <button>Delete this post</button>
+    <br>
+    <h3>Send message:</h3>
+    <form method="post">
+        {%csrf_token%}
+        <input type="text" name="message" placeholder="type here..." style="width:400px; height: 40px"><br>
+        <input type="submit" name="send" value="Send">
+        <input type="submit" name="send" value="Offer">
+        <input type="submit" name="send" value="Delete this post">
+    </form>
+    <br>
 </div>
 {% endblock %}

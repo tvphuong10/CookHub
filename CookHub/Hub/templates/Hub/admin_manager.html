@@ -7,12 +7,16 @@
                 <br>
             <form method="post">
                 {%csrf_token%}
-                <input type="text" name="search" style="width: 90%" placeholder="Type to search..">
+                <input type="text"
+                       name="search"
+                       style="width: 90%"
+                       value="{% if src %}{{search}}{% endif %}"
+                       placeholder="Type to search..">
             </form>
         </div>
+    <br><h2>{{len}} {% if len > 1 %} results {% else %} result {% endif %}</h2>
     <section style="display: line-block;">
-        <div class="product-center container" style="grid-template-columns: repeat(auto-fit,minmax(20rem, 1fr));">
-
+        <div class="product-center container" style="grid-template-columns: repeat(auto-fit,minmax(20rem, 30rem));">
             {% for post,like,view in posts %}
             <div class="product" style="height: 32rem; background: #4054ad">
                 <div class="product-header" style="height: 25rem;">

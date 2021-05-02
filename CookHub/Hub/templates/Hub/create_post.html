@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CookHub</title>
+  <!-- google font -->
+  <link href="https://fonts.googleapis.com/css2?family=Mulish&display=swap" rel="stylesheet">
+  <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <!-- custom css -->
+  <link href="/static/Hub/create_post.css" rel="stylesheet">
+  <!-- <script>
+    $('.fa fa-image').hide();
+    $(document).ready(function() {
+        $("..fa fa-image").click(function(){ {
+    $(this).hide();
+    $('.fa fa-camera-retro').show();
+    }
+        else {
+            $('.fa fa-camera-retro').hide();
+            $('.fa fa-image').show();
+    }
+}) ;
+</script> -->
+<script >
+// $('#cookD').keypress(function(e){
+//     if (e.which == '13') {
+//         var x = document.createElement("INPUT");
+//          x.setAttribute("type", "text");
+//          document.body.appendChild(x);
+//    }
+// });
+var m = 1;
+
+function myFunction() {
+  var x = document.createElement("INPUT");
+  x.setAttribute("type", "text");
+  x.setAttribute("onkeypress", "return searchKeyPress(event);")
+  x.className = "tete";
+  x.id = "id_of_input";
+  x.name = "recipe" + m;
+
+
+  var y = document.createElement("br");
+
+  var h = document.createTextNode("Step " + m);
+
+  var node = document.getElementById("re");
+
+  var l = document.createElement("input");
+  l.setAttribute("type", "file");
+  l.className ="meme";
+  l.name="anh" + m;
+
+    node.appendChild(h);
+    node.appendChild(x);
+    node.appendChild(y);
+    node.appendChild(l);
+    node.appendChild(y);
+  m++;
+}
+
+function searchKeyPress(e)
+{
+    // look for window.event in case event isn't passed in
+    e = e || window.event;
+    if (e.keyCode == 13)
+    {
+        document.getElementById('btnSearch').click();
+        return false;
+    }
+    return true;
+}
+function clicked(e)
+{
+    if(!confirm('Are you sure?')) {
+        e.preventDefault();
+    }
+}
+</script>
+    </head>
+    <body>
+        <form method="post" >
+            {%csrf_token%}
+        <!-- <form method="GET"> -->
+            <div class="begin">
+                <div class="image">
+                <label id="label-camera" for="file-input">
+                    <i id="cam" class="fa fa-image"></i>
+                </label>
+                <input id="file-input" type="file" name="image" id="id_of_image"/>
+                </div>
+            </div>
+            <div class="getName">
+               <div class="name">
+                    <p id="text">NAME DISH</p>
+                    <input type="text" name="dish" id="name-dish" placeholder="Name your dish" >
+                </div>
+            </div>
+
+            <div class="inTotal">
+                <div class="Ingredients">
+                    <p class="resource">INGREDIENTS</p>
+                    <textarea name="textField" id="inText" cols="30" rows="10" placeholder="Please list the necessary ingredients!"></textarea>
+                    <!-- <input type="number"> -->
+                </div>
+            </div>
+            <div class="recipe-End">
+                <div class="recipe" id="re">
+                <p class="step">HOW TO DO</p>
+                <!-- <button onclick="myFunction()" class="add" id="but">+Step</button> -->
+                <input type="button" class="add" id="btnSearch" value="+Step" onclick="myFunction()"/>
+                <br>
+                <!-- <input type="text" name="cook" id="cookD">
+                <br> -->
+                </div>
+            </div>
+
+            <div class="final">
+                <div class="end">
+                    <input type="submit" class="but" onclick="return confirm('Are you sure?')" value="POST"/>
+                    <!-- data-behavior="publish"  data-confirm="Are you ready?" -->
+                </div>
+            </div>
+        </form>
+
+        <!-- </form> -->
+    </body>
+</html>

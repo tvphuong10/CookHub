@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     path('', views.HomeView.as_view()), # tạo đường dẫn mặc định (trống) về home
     path('home', views.HomeView.as_view()),
+    path('search/<str:search>', views.Search.as_view()),
     path('login/', views.LoginView.as_view()), # tạo đường dẫn login
     path('forgot_password/', views.ForgotPassword.as_view()),
     path('logout/', views.logout_view), # tương tự
@@ -19,5 +20,6 @@ urlpatterns = [
     path('admin_site/', views.AdminSite.as_view()),
     path('admin_notify/', views.AdminNotifications.as_view()),
     path('admin_manager/', views.AdminPostsManager.as_view()),
+    path('admin_manager/search/<str:search>', views.AdminSearch.as_view()),
     path('admin_post/<int:id>', views.AdminPost.as_view()),
 ]

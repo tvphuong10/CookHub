@@ -57,11 +57,10 @@
         <div>
             <form method="post">
                 {%csrf_token%}
-                <input type="text" name="search" placeholder="Type to search..">
+                <input type="text" name="search" placeholder="Type to search.." value="{% if search %}{{search}}{% endif %}">
             </form>
         </div>
-        <p style="font-size: 40px;">Search results for <b>{{search}}</b></p>
-        <p style="font-size: 20px; color: #ccc"><i>{{len}} results</i></p>
+        <p style="font-size: 20px; color: #4054ad"><i>{{len}} {% if len > 1 %} results {% else %} result {% endif %}</i></p>
         <br><br>
         <div>
             {% for post in posts %}

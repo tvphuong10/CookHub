@@ -9,6 +9,7 @@ from datetime import date, timedelta
 from django.views import View as ViewBase
 from plotly.offline import plot
 from plotly.graph_objs import Scatter
+import urllib.parse
 
 # req là thông điệp từ client truyền vào
 
@@ -36,22 +37,37 @@ class HomeView(ViewBase):
         return render(req, 'Hub/home.html', context)
 
     def post(self, req):
-        arr = []
+        search = req.POST.get('search').lower().strip()
+        if search == "":
+            return HttpResponseRedirect("/")
+        return HttpResponseRedirect('search/' + urllib.parse.quote(search))
+
+
+class Search(ViewBase):
+    def get(self, req, search):
         user_ = get_user(req)
         if user_ == -1:
             return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
 
-        search = req.POST.get('search').lower().strip()
+        posts = []
+        s = urllib.parse.unquote(search)
         post_ = Post.objects.all()
         for i in range(len(post_)):
-            if post_[i].title.lower().strip().find(search) != -1:
-                arr.append(post_[i])
+            if post_[i].title.lower().strip().find(s) != -1:
+                posts.append(post_[i])
+
         return render(req, 'Hub/search.html', {
             "user_": user_,
-            "posts": arr,
-            "search": search,
-            "len": len(arr),
+            "posts": posts,
+            "search": s,
+            "len": len(posts),
             "media_url": settings.MEDIA_URL})
+
+    def post(self, req, search):
+        s = req.POST.get('search').lower().strip()
+        if s == "":
+            return HttpResponseRedirect("/")
+        return HttpResponseRedirect(urllib.parse.quote(s))
 
 
 class LoginView(ViewBase):
@@ -127,12 +143,38 @@ class EditPost(ViewBase):
         steps = Step.objects.filter(post_id=post_)
         return render(req, 'Hub/edit_post.html', {"post": post_, "steps": steps})
 
+
+def pretty_request(request):
+    headers = ''
+    for header, value in request.META.items():
+        if not header.startswith('HTTP'):
+            continue
+        header = '-'.join([h.capitalize() for h in header[5:].lower().split('_')])
+        headers += '{}: {}\n'.format(header, value)
+
+    return (
+        '{method} HTTP/1.1\n'
+        'Content-Length: {content_length}\n'
+        'Content-Type: {content_type}\n'
+        '{headers}\n\n'
+        '{body}'
+    ).format(
+        method=request.method,
+        content_length=request.META['CONTENT_LENGTH'],
+        content_type=request.META['CONTENT_TYPE'],
+        headers=headers,
+        body=request.body,
+    )
+
+
 def create(req):
     if not req.user.username:
         return HttpResponseRedirect('/')
+
+    #print(req)
     if req.method == 'POST':
-        print(req)
-    return render(req, 'Hub/create.html')
+        return pretty_request(req)
+    return render(req, 'Hub/create_post.html')
 
 
 class PostView(ViewBase):
@@ -374,8 +416,53 @@ class AdminPostsManager(ViewBase):
         return render(req, 'Hub/admin_manager.html',
                       {"user_": user_,
                        "posts": zip(posts, lk_num, view_num),
+                       "len": len(posts),
                        "select": 2,
                        "media_url": settings.MEDIA_URL})
+
+    def post(self, req):
+        search = req.POST.get('search').lower().strip()
+        if search == "":
+            return HttpResponseRedirect("/admin_manager")
+        return HttpResponseRedirect('search/' + urllib.parse.quote(search))
+
+
+class AdminSearch(ViewBase):
+    def get(self, req, search):
+        user_ = get_user(req)
+        if user_ == -1 or user_ == 0:
+            return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
+
+        posts =[]
+        s = urllib.parse.unquote(search)
+        post_ = Post.objects.all()
+        for i in range(len(post_)):
+            if post_[i].title.lower().strip().find(s) != -1:
+                posts.append(post_[i])
+
+        lk_num = []
+        view_num = []
+        for p in posts:
+            lk_num.append(Like.objects.filter(post_id=p).count())
+            view_ = View.objects.filter(post_id=p)
+            v = 0
+            for i in view_:
+                v += i.count
+            view_num.append(v)
+        return render(req, 'Hub/admin_manager.html', {
+            "user_": user_,
+            "posts": zip(posts, lk_num, view_num),
+            "src": True,
+            "len": len(posts),
+            "search": s,
+            "select": 2,
+            "media_url": settings.MEDIA_URL})
+
+    def post(self, req, search):
+        s = req.POST.get('search').lower().strip()
+        if s == "":
+            return HttpResponseRedirect("/admin_manager")
+        return HttpResponseRedirect(urllib.parse.quote(s))
 
 
 class AdminPost(ViewBase):
@@ -413,3 +500,36 @@ class AdminPost(ViewBase):
                        "like_num": lk_num,
                        "img_data": plot_div,
                        "media_url": settings.MEDIA_URL})
+
+    def post(self, req, id):
+        user_ = get_user(req)
+        if user_ == -1 or user_ == 0:
+            return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
+
+        post_ = Post.objects.get(id=id)
+        type = req.POST.get('send')
+        if type == "Send":
+            user2_ = post_.user_id
+            body = req.POST.get('message')
+            messenger = Messenger()
+            messenger.post_id = post_.id
+            messenger.user_receive = user2_
+            messenger.user_send = user_
+            messenger.body = body
+            messenger.save()
+        elif type == "Offer":
+            lg = len(Offer.objects.all())
+            if lg >= 4:
+                first = Offer.objects.first()
+                first.delete()
+
+            new_offer = Offer()
+            new_offer.post_id = post_
+            new_offer.save()
+        else:
+            steps = Step.objects.filter(post_id=post_)
+            for s in steps:
+                s.delete()
+            post_.delete()
+            return HttpResponseRedirect('admin_manager/')
+        return HttpResponseRedirect(str(id))
