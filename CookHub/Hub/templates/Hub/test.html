@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/static/Hub/test.css">
+    </head>
+
+    <body id="body">
+        <div id = "bg">
+            <img class = "logo" alt = "img" src= "/static/Hub/resources/Cookhub_logo.png">
+            <div class = "flat">
+                <div class = "head_layer">
+                    <h1>
+                        Are you borring ?
+                    </h1>
+
+                    <a href="https://www.facebook.com/" target= "_blank">menu</a>
+                </div>
+            </div>
+
+            <div class = "space"></div><br>
+            <div class = "price_layer">
+                <div class="trending">
+                    <h1>Trending</h1>
+                    <ul>
+                        <li>Step 1__________________</li>
+                        <li>Step 2</li>
+                        <li>Step 3</li>
+                        <li>Step 4</li>
+                        <li>Step 1</li>
+                        <li>Step 2</li>
+                        <li>Step 3</li>
+                        <li>Step 4</li>
+                        <li>Step 1</li>
+                        <li>Step 2</li>
+                        <li>Step 3</li>
+                        <li>Step 4</li>
+                        <li>Step 1</li>
+                        <li>Step 2</li>
+                        <li>Step 3</li>
+                        <li>Step 4</li>
+                        <li>Step 1</li>
+                        <li>Step 2</li>
+                        <li>Step 3</li>
+                        <li>Step 4</li>
+                    </ul>
+                </div>
+                <div class = "post">
+                    <img src="/static/Hub/resources/Cookhub_logo.png">
+                    <div>
+                        <h1>title</h1>
+                        <p>____________________________________________________________________</p>
+                    </div>
+                </div>
+                <div class = "post">
+                    <div>
+                        <h1>title</h1>
+                        <p>____________________________________________________________________</p>
+                    </div>
+                    <img src="/static/Hub/resources/Cookhub_logo.png">
+                </div>
+                <div class = "post">
+                    <img src="/static/Hub/resources/Cookhub_logo.png">
+                    <div>
+                        <h1>title</h1>
+                        <p>____________________________________________________________________</p>
+                    </div>
+                </div>
+                <div class = "post">
+                    <div>
+                        <h1>title</h1>
+                        <p>____________________________________________________________________</p>
+                    </div>
+                    <img src="/static/Hub/resources/Cookhub_logo.png">
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById("body").onscroll = function scrollFunction() {
+                var to_top = document.scrollingElement.scrollTop;
+                var x = "center";
+                var factor = 0.5;
+                var y = to_top * factor;
+                document.getElementById("bg").style.backgroundPosition = x + " " + y + "px";
+            }
+        </script>
+    </body>
+</html>

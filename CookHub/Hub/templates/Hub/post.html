@@ -9,7 +9,73 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
     <!--Scroll reveal CDN-->
     <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <link rel="stylesheet" href="/static/Hub/styles.css">
+
+    <script>
+        function like(ele) {
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'like_url' %}",
+                data: {
+                 "csrfmiddlewaretoken": "{{ csrf_token }}",
+                 "user_id": {{user_.id}},
+                 "post_id": {{post.id}},
+                 },
+                 success: function (response) {
+                    if (ele.id == "like_button_id") {
+                        if(response["valid"]) {
+                            document.getElementById('icon_id').className = "fa fa-heart";
+                        } else {
+                            document.getElementById('icon_id').className = "far fa-heart";
+                        }
+                        document.getElementById('like_num').innerHTML = response["len"];
+                    } else {
+                        if(response["valid"]) {
+                            document.getElementById('icon_' + ele.id).className = "fa fa-heart";
+                        } else {
+                            document.getElementById('icon_' + ele.id).className = "far fa-heart";
+                        }
+                    }
+                 },
+                 error: function (response) {
+                    console.log(response)
+                 }
+
+            })
+        }
+        function cmt(e) {
+            if (e.keyCode == 13) {
+                var comment = document.createElement('p');
+                var user = document.createElement('b');
+                var body = document.createTextNode(document.getElementById('comment').value);
+                user.innerHTML= "{{user_.username}} : ";
+                comment.appendChild(user);
+                comment.appendChild(body);
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'cmt_url' %}",
+                    data: {
+                     "csrfmiddlewaretoken": "{{ csrf_token }}",
+                     "user_id": {{user_.id}},
+                     "post_id": {{post.id}},
+                     "body": document.getElementById('comment').value
+                     },
+                     success: function (response) {
+                        if(response["valid"]) {
+                            list = document.getElementById('cmt_area');
+                            list.appendChild(comment);
+                            //list.insertBefore(comment, list.childNodes[2]);
+                        }
+                     },
+                     error: function (response) {
+                        console.log(response)
+                     }
+                })
+            }
+        }
+    </script>
 </head>
 <body>
     <header style="position: fixed">
@@ -87,20 +153,19 @@
              height:80px;
              border-radius:50%;
              box-shadow:5px 5px 20px -5px rgba(0, 0, 0, 0.5);">
-        <p><i>{{post.user_id.sign}}</i></p>
+        <p><i id="1">{{post.user_id.sign}}</i></p>
         <br><br><br><br>
         {% if user.username %}
             {% if like %}
-                <a href="/like-post/{{post.id}}/{{user_.id}}/{{post.id}}" style="font-size: 20px;">
-                    <p class="fa fa-heart" style="font-size: 30px;"></p>
-                    {{like_num}}
-                </a>
+                <button id="like_button_id" onclick="like(this)">
+                    <p class="fa fa-heart" id="icon_id" style="font-size: 30px;"></p>
+                </button>
             {% else %}
-                <a href="/like-post/{{post.id}}/{{user_.id}}/{{post.id}}" style="font-size: 20px;">
-                    <p class="far fa-heart" style="font-size: 30px;"></p>
-                    {{like_num}}
-                </a>
+                    <button id="like_button_id" onclick="like(this)">
+                    <p class="far fa-heart" id="icon_id" style="font-size: 30px;"></p>
+                </button>
             {% endif %}
+            <a id="like_num">{{like_num}}</a>
             {% if enable_edit %}
                 <a href="/edit/{{post.id}}" class="button_scroll"> &ensp; &ensp; &ensp;
                     <p class="far fa-edit" style="font-size: 30px;"></p>
@@ -111,29 +176,34 @@
                 </a>
             {% endif %}
         {% endif %}
-        <div>
-            <form method="post">
-                {%csrf_token%}
-                {% if user.username %}
-                <input type="text" name="cmt" placeholder="Say something">
-                {% endif %}
-                {% for cmt in comments %}
-                    <p><b>{{cmt.user_id.username}} :</b> {{cmt.body}}</p>
-                {% endfor %}
-            </form>
+        <div id="cmt_area">
+            {% if user.username %}
+            <input type="text" name="cmt" id="comment" onkeypress="cmt(event)" placeholder="Say something">
+            {% endif %}
+            {% for cmt in comments %}
+                <p><b>{{cmt.user_id.username}} :</b> {{cmt.body}}</p>
+            {% endfor %}
         </div>
     </section>
 
     <section class="section featured" style="background: #e3e9ff;">
-        <div class="product-center container" style="width: 90%">
-            {% for d in offers %}
-
+        <div class="product-center container" style="width: 90%; grid-template-columns: repeat(auto-fit,minmax(20rem, 30rem));">
+            {% for is_like, d in offers_zip %}
+            {% if d != post %}
             <div class="product"  style="height: 38rem;">
                 <div class="product-header" style="height: 28rem;">
                     <img src="{{media_url}}{{ d.image }}" alt="">
                     <ul class="icons">
                         {% if user.username %}
-                        <span><a href="/like-post/{{d.id}}/{{user_.id}}/home" class="far fa-heart"></a></span>
+                        <span>
+                            <button id="{{d.id}}" onclick="like(this)">
+                                {% if is_like %}
+                                <p class="fa fa-heart" id="icon_{{d.id}}" style="font-size: 30px;"></p>
+                                {% else %}
+                                <p class="far fa-heart" id="icon_{{d.id}}" style="font-size: 30px;"></p>
+                                {% endif %}
+                            </button>
+                        </span>
                         <span><i class="far fa-comments"></i></span>
                         {% endif %}
                         <span><i class="fas fa-share"></i></span>
@@ -154,7 +224,7 @@
                     <h4 class="price">{{d.date}}</h4>
                 </div>
             </div>
-
+            {% endif %}
             {% endfor %}
         </div>
     </section>

@@ -9,7 +9,32 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
     <!--Scroll reveal CDN-->
     <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <link rel="stylesheet" href="/static/Hub/styles.css">
+    <script>
+        function like(ele) {
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'like_url' %}",
+                data: {
+                 "csrfmiddlewaretoken": "{{ csrf_token }}",
+                 "user_id": {{user_.id}},
+                 "post_id": ele.id,
+                 },
+                 success: function (response) {
+                    if(response["valid"]) {
+                        document.getElementById('icon_' + ele.id).className = "fa fa-heart";
+                    } else {
+                        document.getElementById('icon_' + ele.id).className = "far fa-heart";
+                    }
+                 },
+                 error: function (response) {
+                    console.log(response)
+                 }
+
+            })
+        }
+    </script>
 </head>
 <body>
     <header style="position: fixed">
@@ -77,14 +102,22 @@
         </div>
 
         <div class="product-center container">
-            {% for d in offers %}
+            {% for d,like in offers_zip %}
 
             <div class="product">
                 <div class="product-header">
                     <img src="{{media_url}}{{ d.post_id.image }}" alt="">
                     <ul class="icons">
                         {% if user.username %}
-                        <span><a href="/like-post/{{d.post_id.id}}/{{user_.id}}/home" class="far fa-heart"></a></span>
+                        <span>
+                            <button id="{{d.id}}" onclick="like(this)">
+                                {% if like %}
+                                <p class="fa fa-heart" id="icon_{{d.id}}" style="font-size: 30px;"></p>
+                                {% else %}
+                                <p class="far fa-heart" id="icon_{{d.id}}" style="font-size: 30px;"></p>
+                                {% endif %}
+                            </button>
+                        </span>
                         <span><i class="far fa-comments"></i></span>
                         {% endif %}
                         <span><i class="fas fa-share"></i></span>
@@ -135,14 +168,22 @@
 
     <section class="section featured" style="background: #e3e9ff;">
         <div class="product-center container" style="grid-template-columns: repeat(auto-fit,minmax(20rem, 1fr));">
-            {% for d in posts %}
+            {% for d,like in posts_zip %}
 
             <div class="product" style="height: 35rem;">
                 <div class="product-header" style="height: 25rem;">
                     <img src="{{media_url}}{{ d.image }}" alt="">
                     <ul class="icons">
                         {% if user.username %}
-                        <span><a href="/like-post/{{d.id}}/{{user_.id}}/home" class="far fa-heart"></a></span>
+                        <span>
+                            <button id="{{d.id}}" onclick="like(this)">
+                                {% if like %}
+                                <p class="fa fa-heart" id="icon_{{d.id}}" style="font-size: 30px;"></p>
+                                {% else %}
+                                <p class="far fa-heart" id="icon_{{d.id}}" style="font-size: 30px;"></p>
+                                {% endif %}
+                            </button>
+                        </span>
                         <span><i class="far fa-comments"></i></span>
                         {% endif %}
                         <span><i class="fas fa-share"></i></span>

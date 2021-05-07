@@ -1,7 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout, decorators
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+
 from .models import *
 from .forms import RegistrationForm, ChangeInformationForm
 from django.core.exceptions import ObjectDoesNotExist
@@ -30,9 +32,19 @@ class HomeView(ViewBase):
             return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
 
         offer_ = Offer.objects.all()
+        like_offer = []
+        for o in offer_:
+            like_offer.append(Like.objects.filter(post_id=o.post_id, user_id=user_.id).exists())
+
         users = User.objects.all()
         post_ = Post.objects.all()  # lấy toàn bộ model Post
-        context = {"user_": user_, "posts": post_, "offers": offer_, 'users': users,
+        like_post = []
+        for p in post_:
+            like_post.append(Like.objects.filter(post_id=p, user_id=user_.id).exists())
+        context = {"user_": user_,
+                   "posts_zip": zip(post_, like_post),
+                   "offers_zip": zip(offer_, like_offer),
+                   'users': users,
                    "media_url": settings.MEDIA_URL}  # tạo 1 biến lưu dữ liệu truyền vào file html
         return render(req, 'Hub/home.html', context)
 
@@ -144,36 +156,12 @@ class EditPost(ViewBase):
         return render(req, 'Hub/edit_post.html', {"post": post_, "steps": steps})
 
 
-def pretty_request(request):
-    headers = ''
-    for header, value in request.META.items():
-        if not header.startswith('HTTP'):
-            continue
-        header = '-'.join([h.capitalize() for h in header[5:].lower().split('_')])
-        headers += '{}: {}\n'.format(header, value)
-
-    return (
-        '{method} HTTP/1.1\n'
-        'Content-Length: {content_length}\n'
-        'Content-Type: {content_type}\n'
-        '{headers}\n\n'
-        '{body}'
-    ).format(
-        method=request.method,
-        content_length=request.META['CONTENT_LENGTH'],
-        content_type=request.META['CONTENT_TYPE'],
-        headers=headers,
-        body=request.body,
-    )
-
-
 def create(req):
     if not req.user.username:
         return HttpResponseRedirect('/')
 
-    #print(req)
     if req.method == 'POST':
-        return pretty_request(req)
+        print(1+req)
     return render(req, 'Hub/create_post.html')
 
 
@@ -204,7 +192,11 @@ class PostView(ViewBase):
         lk_num = Like.objects.filter(post_id=post_.id).count()
         cmt = Comment.objects.filter(post_id=post_)
         offers = Post.objects.filter(user_id=post_.user_id)
-        enable_edit = False;
+        is_liked = []
+        for o in offers:
+            is_liked.append(Like.objects.filter(post_id=o, user_id=user_.id).exists())
+
+        enable_edit = False
         if post_.user_id == user_:
             enable_edit = True
 
@@ -215,52 +207,11 @@ class PostView(ViewBase):
             "like": lk,
             "like_num": lk_num,
             "comments": cmt,
-            "offers": offers,
+            "offers_zip": zip(is_liked, offers),
             "enable_edit": enable_edit,
             "media_url": settings.MEDIA_URL
         }
         return render(req, 'Hub/post.html', context)
-
-    def post(self, req, id):
-        user_ = get_user(req)
-        post_ = Post.objects.get(id=id)
-        if user_ == 0:
-            return render(req, 'Hub/error.html', {"error": 'chưa đăng nhập'})
-        c = Comment()
-        c.body = req.POST.get('cmt')
-        c.user_id = user_
-        c.post_id = post_
-        c.save()
-        return HttpResponseRedirect('/' + str(id))
-
-
-@decorators.login_required(login_url='/login/')
-def like(req, id, user_id, next):
-    if req.user.username:
-        try:
-            user_ = User.objects.get(id=user_id).username
-        except ObjectDoesNotExist:
-            return render(req, 'Hub/error.html', {"error": 'đường dẫn sai'})
-    else:
-        return HttpResponseRedirect('/login')
-
-    if user_ != req.user.username:
-        return render(req, 'Hub/error.html', {"error": 'đăng nhập sai'})
-    else:
-        try:
-            obj = Like.objects.filter(post_id=id, user_id=user_id)
-            if obj.exists():
-                obj.delete()
-                return HttpResponseRedirect('/' + next)
-            else:
-                lk = Like()
-                lk.user_id = User.objects.get(id=user_id)
-                lk.post_id = Post.objects.get(id=id)
-                lk.save()
-
-                return HttpResponseRedirect('/' + next)
-        except ObjectDoesNotExist:
-            return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
 
 
 class Report(ViewBase):
@@ -533,3 +484,48 @@ class AdminPost(ViewBase):
             post_.delete()
             return HttpResponseRedirect('admin_manager/')
         return HttpResponseRedirect(str(id))
+
+
+def like(req):
+    if req.is_ajax and req.method == "POST":
+        u_id = req.POST.get("user_id", None)
+        p_id = req.POST.get("post_id", None)
+        user_ = User.objects.get(id=u_id)
+        post_ = Post.objects.get(id=p_id)
+
+        obj = Like.objects.filter(post_id=post_, user_id=user_)
+        if obj.exists():
+            obj.delete()
+            count = len(Like.objects.filter(post_id=post_))
+            return JsonResponse({"valid": False, "len": count}, status=200)
+        else:
+            lk = Like()
+            lk.user_id = user_
+            lk.post_id = post_
+            lk.save()
+            count = len(Like.objects.filter(post_id=post_))
+            return JsonResponse({"valid": True, "len": count}, status=200)
+
+    return JsonResponse({}, status=400)
+
+
+def comment(req):
+    if req.is_ajax and req.method == "POST":
+        u_id = req.POST.get("user_id", None)
+        p_id = req.POST.get("post_id", None)
+        body = req.POST.get("body", None)
+        user_ = User.objects.get(id=u_id)
+        post_ = Post.objects.get(id=p_id)
+        print(body)
+
+        cmt = Comment()
+        cmt.user_id = user_
+        cmt.post_id = post_
+        cmt.body = body
+        cmt.save()
+        return JsonResponse({"valid": True}, status=200)
+    return JsonResponse({}, status=400)
+
+
+def test(req):
+    return render(req, 'Hub/test.html')
