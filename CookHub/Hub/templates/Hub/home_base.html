@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Mulish&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/static/Hub/test.css">
+        <script src="https://kit.fontawesome.com/2dae4ea8d1.js" crossorigin="anonymous"></script>
+    </head>
+    <body id="body">
+        <header>
+            <div class="container">
+                <div class="item">
+                    <label for="home" class="lb_item">
+                        <a href="/" class="fa fa-home"></a>
+                    </label>
+                    <a href="/" id="home" class="item-link">Home</a>
+                </div>
+
+                {% if user.username %}
+                <div class="item">
+                    <label for="create" class="lb_item">
+                        <a href="/create" class="fas fa-plus-circle"></a>
+                    </label>
+                    <a href="/create" id="create" class="item-link">New Dish</a>
+                </div>
+
+                <div class="item">
+                    <a href="/user_page/{{user_.id}}" id="user" class="item-link">Hello {{user.username}} </a>
+                    <label for="user" class="lb_item">
+                        <a href="/user_page/{{user_.id}}"><img src="{{media_url}}{{ user_.image }}" alt=""></a>
+                    </label>
+                </div>
+
+                <div class="item">
+                    <label for="notify" class="lb_item">
+                        <a href="/notification" class="fas fa-bell"></a>
+                    </label>
+                    <a href="/notification" id="notify" class="item-link">Notifications</a>
+                </div>
+
+                <div class="item">
+                    <label for="log_out" class="lb_item">
+                        <a href="/logout" class="fas fa-sign-out-alt"></a>
+                    </label>
+                    <a href="/logout" id="log_out" class="item-link">Log Out</a>
+                </div>
+                {% else %}
+                <div class="item">
+                    <label for="log_in" class="lb_item">
+                        <a href="/login" class="fas fa-sign-in-alt"></a>
+                    </label>
+                    <a href="/login" id="log_in" class="item-link">Log In</a>
+                </div>
+                <div class="item">
+                    <label for="register" class="lb_item">
+                        <a href="/register" class="fas fa-user-plus"></a>
+                    </label>
+                    <a href="/register" id="register" class="item-link">Register</a>
+                </div>
+                {% endif %}
+            </div>
+        </header>
+    {% block content %}
+
+    {% endblock %}
+    </body>
+</html>

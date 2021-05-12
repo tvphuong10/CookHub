@@ -1,24 +1,41 @@
 :root {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'Fira Sans', sans-serif;
     font-size: medium;
     /* font-weight: 600; */
 }
 body {
-    /* background-image: linear-gradient(90deg, rgb(158, 130, 78), rgb(196, 231, 39), rgb(238, 192, 39)); */
-    background-image: url("Untitled.jpg");
+    background-color: #080A0F;
 }
+
+.top_layer {
+    width: 25%;
+    height: 100%;
+    display: block;
+    float: left;
+    margin-top: 40px;
+    margin-left:20px;
+    margin-right:auto;
+    text-align:center;
+    background-color: #13141B;
+    border: 4px solid #fff;
+    border-style: dashed;
+    border-radius: 20px;
+}
+
 .begin {
-    display: flex;
+    width: 100%;
+    background-color: #080A0F;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
     justify-content: center;
     justify-items: center;
-    /* background-color: aliceblue; */
 }
 .image {
     display: block;
     text-align: center;
-    background-color: rgb(160, 221, 240);
-    width: 600px;
-
+    background-color: none;
+    color: #8e9299;
 }
 
 .image #cam {
@@ -31,27 +48,35 @@ body {
 }
 
 .image #file-input {
- padding: 5px;
- margin-top: 10px;
- margin-bottom: 10px;
-padding-left: 100px;
-cursor: pointer;
-/* background-color: aliceblue; */
-border: solid 2px rgb(19, 19, 18);
+    font-family: 'Fira Sans', sans-serif;
+    padding: 10px;
+    font-size: 19px;
+    cursor: pointer;
+    border: none;
 }
 
 .getName {
-    display: flex;
+    display: block;
+    float: left;
+    width: 100%;
+    margin-top: 10px;
     justify-content: center;
     justify-items: center;
-    margin: 10px 10px;
+    color: #fff;
 }
 
-.name{
+.name {
+    padding-left: 2%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
     display: block;
-    text-align: center;
-    background-color:rgb(160, 221, 240);
-    width: 600px;
+    background: #F5840E;
+    color: #080A0F;
+    width: 80%;
+    height: 50px;
+    display: flex;
 }
 
 .name #text{
@@ -61,105 +86,178 @@ border: solid 2px rgb(19, 19, 18);
     margin-left: 10px;
 }
 
-.name #name-dish{
-    width: 70%;
-    height: 40px;
-    margin-bottom: 10px;
+.name #name-dish {
+    background:none;
+    width: 80%;
+    font-size: 34px;
+    border:none;
+    font-family: 'Fira Sans', sans-serif;
+}
+
+.name #name-dish:focus {
+    outline: none;
 }
 
 .inTotal {
-    display: flex;
+    display: block;
+    float: right;
     justify-content: center;
     margin: 10px 10px;
-    /* background-color: aliceblue; */
+    width: 40%;
 }
 
-.Ingredients{
-    display: block;
-    text-align: center;
-    width: 600px;
-    background-color: rgb(160, 221, 240);
-    height: max-content;
+#describe {
+    float: left;
+    color: #fff;
+    background: none;
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 24px;
+    outline: none;
+    border:none;
+    margin: 20px;
+}
 
+#describe:focus {
+    border-bottom:1px solid #fff;
 }
-.Ingredients p{
-    font-weight: 600;
-    text-align: left;
-    margin-left: 10px;
-    margin-bottom: -15px;
+
+.Ingredients {
+    height: 400px;
+    margin-top: 20px;
+    color: #fff;
+    font-family: 'Fira Sans', sans-serif;
 }
+
 .Ingredients #inText{
     width: 70%;
     height: 100%;
-    margin-top: 30px;
-    /* border:solid 2px 5%; */
-    /* border: solid 2px rgb(97, 163, 240); */
-
+    border: none;
+    font-size: 24px;
+    color: #080A0F;
+    padding: 12px;
+    border-radius:10px;
 }
+
+.Ingredients #inText:focus {
+    outline:none;
+}
+
 .recipe-End {
-    display: flex;
+    width: 70%;
+    display: block;
+    float:right;
     justify-content: center;
     justify-items: center;
+    color: #fff;
+    margin-top:50px;
 }
 
-.recipe{
+#num {
+    font-size: 24px;
+    background: none;
+    color: #fff;
+    text-align: right;
+    outline: none;
+    border: none;
+    display: inline-block;
+    width: 40px;
+}
+
+.steps {
+    background-color: #13141B;
+    border-radius: 20px;
+    margin: 12px;
+}
+
+.recipe {
     display: block;
     text-align: center;
-    background-color: rgb(160, 221, 240);
-    width: 600px;
+    width: 100%;
+    font-size: 20px;
     height: max-content;
 }
-.recipe p{
-    text-align: left;
-    margin-left: 10px;
-    font-weight: 600;
+.recipe p {
+    display: inline-block;
+    font-size: 24px;
 }
-.add{
-    width: 20%;
-    margin-top: 5px;
-    margin-bottom: 10px;
-    height: max-content;
-    background-color: antiquewhite;
+.add {
+    width: 60px;
+    height: 60px;
+    border: 4px solid #080A0F;
+    box-shadow: 0px 0px 0px 2px #F5840E;
+    outline: none;
+    background-color: #F5840E;
+    color: #080A0F;
     cursor: pointer;
+    margin: 15px;
+    border-radius: 50%;
+    font-size: 40px;
+    display: block;
+    margin-top: 24px;
+    margin-left: auto;
+    margin-right:auto;
 }
+
+.add:hover {
+    background-color: #F7DD91;
+}
+
 .tete {
-    /* margin-top: 20px;
-    margin-left: 10px;
-    margin-right: 50px;
-    margin-bottom: 5px; */
     margin: 20px 50px 5px 10px;
     width: 40%;
     height: 40px;
-    background-color: antiquewhite;
-
-}
-.final {
-    margin-top: 10px;
-}
-.end {
-    display: flex;
-    justify-content: center;
-    width: 120px;
-    height: max-content;
-    background-color: rgb(25, 132, 226);
-    margin: 0 auto;
-   transition: all 2s;
+    background-color: #13141B;
+    color: #fff;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    font-size: 20px;
 }
 
-.final :hover {
-    width: 200px;
-    background-color: rgb(233, 201, 19);
+.lb_submit {
+    width: 130px;
+    height: 50px;
+    border: 4px solid #080A0F;
+    box-shadow: 0px 0px 0px 2px #F5840E;
+    outline: none;
+    background-color: #F5840E;
+    color: #080A0F;
+    cursor: pointer;
+    font-size: 50px;
+    display: block;
+    margin-top: 24px;
+    margin-left: auto;
+    margin-right:auto;
+}
+
+.lb_submit:hover {
+    background-color: #F7DD91;
+}
+
+.lb_submit i {
+    text-align:center;
+    display:block;
 }
 
 .but {
-    font-weight: 300;
-    width: 120px;
-    height: 40px;
-    cursor: pointer;
+    display:none;
 }
+
 .meme{
-    background-color: aliceblue;
-    width: 200px;
-    margin-left: 10px;
-    transition: all 2s;
+    background-color: none;
+    color: #8e9299;
+    font-size: 20px;
+}
+
+@media (max-width:960px) {
+    .top_layer {
+        width: 90%;
+    }
+
+    .recipe-End {
+        width: 100%;
+    }
+
+    .tete {
+        width: 90%;
+    }
 }

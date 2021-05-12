@@ -2,7 +2,7 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('', views.HomeView.as_view()), # tạo đường dẫn mặc định (trống) về home
+    path('', views.HomeView2.as_view()), # tạo đường dẫn mặc định (trống) về home
     path('home', views.HomeView.as_view()),
     path('search/<str:search>', views.Search.as_view()),
     path('login/', views.LoginView.as_view()), # tạo đường dẫn login

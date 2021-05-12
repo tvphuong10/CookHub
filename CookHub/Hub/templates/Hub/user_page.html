@@ -1,72 +1,20 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Menu</title>
-    <!--Font awesome CDN-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
-    <!--Scroll reveal CDN-->
-    <script src="https://unpkg.com/scrollreveal"></script>
-    <link rel="stylesheet" href="/static/Hub/styles.css">
-</head>
-<body>
-    <header style="position: fixed">
-        <div class="container">
-            <nav class="nav">
-                <div class="menu-toggle">
-                    <i class="fas fa-bars"></i>
-                    <i class="fas fa-times"></i>
-                </div>
-                <a href="/" class="logo"><img src="/static/Hub/resources/hub_logo.png" alt=""></a>
-                <ul class="nav-list">
-                    <li class="nav-item">
-                        <a href="/" class="nav-link">Home</a>
-                    </li>
-                    {% if user.username %}
-                    <li class="nav-item">
-                        <a href="/create" class="nav-link">New Dish</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/notification" class="nav-link">notifications<i class="fas fa-circle" style="color:red"></i></a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/user_page/{{user_.id}}" class="nav-link active">Hello {{user.username}} </a>
-                    </li>
-                    <li class="nav-item">
-                        <img src="{{media_url}}{{ user_.image }}" alt="" style="width:auto; height:40px; border-radius: 50%;">
-                    </li>
-                    <li class="nav-item">
-                        <a href="/logout" class="nav-link">Log Out</a>
-                    </li>
-                    {% else %}
-                    <li class="nav-item">
-                        <a href="/login" class="nav-link">Log In</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/register" class="nav-link">Register</a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
-    </header>
+{% extends "Hub/home_base.html" %}
 
-    <section class="hero" id="hero">
-        <div class="loginbox" style="font-size: 15px;">
-            <h1 class="name-box" style="font-size: 50px">
-                <img src="{{media_url}}{{ user2.image }}" alt="" style="border-radius: 50%;">
-                {{user2.username}}
-            </h1>
-            <p><i>{{user2.sign}}</i></p>
-            {% if not guess %}
-                <a href="/user_edit">Edit profile</a>
-            {% endif %}
-            <h2>post: {{post_count}} &ensp; &ensp; like: {{like_count}} &ensp; &ensp; view: {{view_count}}</h2>
-            <br>
-            <a class="fas fa-share" style="font-size: 20px" href="#"></a>
-        </div>
+{% block content %}
+<div id = "bg">
+
+    <section class="flat" style="text-align: center; color:#fff;" id="hero">
+        <img src="{{media_url}}{{ user2.image }}" class="logo" alt="" style="border-radius: 50%; padding-top:0; margin-top:70px;">
+        <h1 class="name-box" style="font-size: 50px">
+            {{user2.username}}
+        </h1>
+        <p><i>{{user2.sign}}</i></p>
+        {% if not guess %}
+            <a href="/user_edit">Edit profile</a>
+        {% endif %}
+        <h2>post: {{post_count}} &ensp; &ensp; like: {{like_count}} &ensp; &ensp; view: {{view_count}}</h2>
+        <br>
+        <a class="fas fa-share" style="font-size: 20px" href="#"></a>
     </section>
 
     <section style="background: #e3e9ff;">
@@ -84,6 +32,6 @@
             {% endfor %}
         </div>
     </section>
-    <script src="/static/Hub/main.js"></script>
-
-</body>
+</div>
+<script src="/static/Hub/main.js"></script>
+{% endblock %}

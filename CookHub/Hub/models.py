@@ -21,7 +21,7 @@ class Post(models.Model): # lưu bài viết
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.title
+        return str(self.title)
 
 
 class Comment(models.Model): # lưu bình luận

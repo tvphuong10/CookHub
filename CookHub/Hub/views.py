@@ -11,6 +11,7 @@ from datetime import date, timedelta
 from django.views import View as ViewBase
 from plotly.offline import plot
 from plotly.graph_objs import Scatter
+import  plotly.express as px
 import urllib.parse
 
 # req là thông điệp từ client truyền vào
@@ -32,15 +33,21 @@ class HomeView(ViewBase):
             return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
 
         offer_ = Offer.objects.all()
-        like_offer = []
-        for o in offer_:
-            like_offer.append(Like.objects.filter(post_id=o.post_id, user_id=user_.id).exists())
-
         users = User.objects.all()
-        post_ = Post.objects.all()  # lấy toàn bộ model Post
+        post_ = Post.objects.all()
+        like_offer = []
         like_post = []
+        for o in offer_:
+            if user_ != 0:
+                like_offer.append(Like.objects.filter(post_id=o.post_id, user_id=user_.id).exists())
+            else:
+                like_offer.append('')
         for p in post_:
-            like_post.append(Like.objects.filter(post_id=p, user_id=user_.id).exists())
+            if user_ != 0:
+                like_post.append(Like.objects.filter(post_id=p, user_id=user_.id).exists())  # lấy toàn bộ model Post
+            else:
+                like_post.append('')
+
         context = {"user_": user_,
                    "posts_zip": zip(post_, like_post),
                    "offers_zip": zip(offer_, like_offer),
@@ -54,6 +61,35 @@ class HomeView(ViewBase):
             return HttpResponseRedirect("/")
         return HttpResponseRedirect('search/' + urllib.parse.quote(search))
 
+
+class HomeView2(ViewBase):
+    def get(self, req):
+        user_ = get_user(req)
+        if user_ == -1:
+            return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
+
+        offer_ = Offer.objects.all()
+        users = User.objects.all()[:3]
+        post_ = Post.objects.all()
+
+
+        x = [1, 2, 3, 4, 5, 1, 2, 3, 4, 5]
+        y = [2, 4, 3, 0, 6, 4, 3, 4, 4, 4]
+        z = ["t", "t", "t", "t", "t", "n", "n", "n", "n", "n"]
+        fig = px.line({"day": x, "view": y, "post": z}, x="day", y="view", color='post',
+                      template="plotly_dark")
+
+        plot_div = plot(fig, output_type='div')
+
+        return render(req, 'Hub/test.html', {
+            "user_": user_,
+            "offer_first": offer_[0],
+            "offers": offer_[1:],
+            "img_data": plot_div,
+            "posts": post_,
+            "users": users,
+            "media_url": settings.MEDIA_URL
+        })
 
 class Search(ViewBase):
     def get(self, req, search):
@@ -157,12 +193,32 @@ class EditPost(ViewBase):
 
 
 def create(req):
-    if not req.user.username:
-        return HttpResponseRedirect('/')
+    user_ = get_user(req)
+    if user_ == -1 or user_ == 0:
+        return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
 
     if req.method == 'POST':
-        print(1+req)
-    return render(req, 'Hub/create_post.html')
+        new_post = Post()
+        new_post.user_id = user_
+        new_post.title = req.POST.get('dish')
+        new_post.description = req.POST.get('des')
+        new_post.image = req.FILES['image']
+        new_post.material = req.POST.get('textField')
+        new_post.save()
+
+        num_step = req.POST.get('numberStep')
+        for n in range(int(num_step)):
+            new_step = Step()
+            new_step.post_id = new_post
+            new_step.body = req.POST.get('recipe' + str(n + 1))
+            new_step.image = req.FILES.get('anh' + str(n + 1))
+            new_step.save()
+
+        id = Post.objects.latest('id').id
+        return HttpResponseRedirect('/' + str(id))
+    return render(req, 'Hub/create_post.html', {
+        "user_": user_,
+        "media_url": settings.MEDIA_URL})
 
 
 class PostView(ViewBase):
@@ -193,8 +249,10 @@ class PostView(ViewBase):
         cmt = Comment.objects.filter(post_id=post_)
         offers = Post.objects.filter(user_id=post_.user_id)
         is_liked = []
-        for o in offers:
-            is_liked.append(Like.objects.filter(post_id=o, user_id=user_.id).exists())
+
+        if user_ != 0:
+            for o in offers:
+                is_liked.append(Like.objects.filter(post_id=o, user_id=user_.id).exists())
 
         enable_edit = False
         if post_.user_id == user_:
@@ -528,4 +586,12 @@ def comment(req):
 
 
 def test(req):
-    return render(req, 'Hub/test.html')
+    x = [1, 2, 3, 4, 5, 1, 2, 3, 4, 5]
+    y = [2, 4, 3, 0, 6, 4, 3, 4, 4, 4]
+    z = ["t", "t", "t", "t", "t", "n", "n", "n", "n", "n"]
+    fig = px.line({"day": x, "view": y, "post": z}, x="day", y="view", color='post',
+                     template="plotly_dark")
+
+    plot_div = plot(fig, output_type='div')
+
+    return render(req, 'Hub/test.html', {"img_data": plot_div})

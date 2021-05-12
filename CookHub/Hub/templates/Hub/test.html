@@ -1,88 +1,138 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <link rel="stylesheet" href="/static/Hub/test.css">
-    </head>
+{% extends "Hub/home_base.html" %}
 
-    <body id="body">
-        <div id = "bg">
-            <img class = "logo" alt = "img" src= "/static/Hub/resources/Cookhub_logo.png">
-            <div class = "flat">
-                <div class = "head_layer">
-                    <h1>
-                        Are you borring ?
-                    </h1>
+{% block content %}
+    <div class="btn_scroll">
+        <button onclick="goCreate()"><i class="fas fa-plus"></i></button>
+        <button onclick="goTop()" id="go_top" title="Go to top"><i class="fas fa-angle-double-up"></i></button>
+    </div>
+    <div id = "bg">
+        <img class = "logo" alt = "img" src= "/static/Hub/resources/Cookhub_logo.png">
+        <div class = "flat">
+            <div class = "head_layer">
 
-                    <a href="https://www.facebook.com/" target= "_blank">menu</a>
+                <div class="slider">
+                    <div class="slides">
+                        <input type="radio" name="radio-btn" id="radio1">
+                        <input type="radio" name="radio-btn" id="radio2">
+                        <input type="radio" name="radio-btn" id="radio3">
+                        <input type="radio" name="radio-btn" id="radio4">
+
+                        <div class="slide first">
+                            <div class="slide_body">
+                                <div class="slide_img">
+                                     <img src="{{media_url}}{{ offer_first.post_id.image }}"  alt="">
+                                </div>
+                                <div class="slide_text">
+                                    <a class="" href="{{offer_first.post_id.id}}">
+                                        <h1>{{offer_first.post_id.title}}</h1>
+                                        <h2>{{offer_first.post_id.description}}</h2>
+                                        <h3>{{offer_first.post_id.material}}</h3>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {%for o in offers %}
+                        <div class="slide">
+                            <div class="slide_body">
+                                <div class="slide_img">
+                                     <img src="{{media_url}}{{ o.post_id.image }}"  alt="">
+                                </div>
+                                <div class="slide_text">
+                                    <a class="" href="{{o.post_id.id}}">
+                                        <h1>{{o.post_id.title}}</h1>
+                                        <h2>{{o.post_id.description}}</h2>
+                                        <h3>{{o.post_id.material}}</h3>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <div class="navigation-auto">
+                          <div class="auto-btn1"></div>
+                          <div class="auto-btn2"></div>
+                          <div class="auto-btn3"></div>
+                          <div class="auto-btn4"></div>
+                        </div>
+                    </div>
+                    <div class="navigation-manual">
+                        <label for="radio1" class="manual-btn"></label>
+                        <label for="radio2" class="manual-btn"></label>
+                        <label for="radio3" class="manual-btn"></label>
+                        <label for="radio4" class="manual-btn"></label>
+                    </div>
+                </div>
+
+
+                <a href="#menu_id" class="menu_btn">menu</a>
+            </div>
+        </div>
+
+        <div class = "space"></div><br>
+        <div class = "price_layer">
+            <div class="trending" style="float:left;">
+                <div class="search">
+                    <input id="search_id" type="text" name="search_text" onkeypress="search(event)" placeholder="Type to search..">
+                    <button type="submit" class="fas fa-search" onclick="search()"></button>
+                </div>
+                <h2>Offer</h2>
+                <a href="#">Trứng</a>
+                <a href="#">Món xào</a>
+                <a href="#">Món luộc</a>
+                <a href="#">Gà tây</a>
+                <a href="#">Trứng</a>
+                <a href="#">Món xào</a>
+                <a href="#">Món luộc</a>
+                <a href="#">Gà tây</a>
+                <a href="#">Trứng</a>
+                <a href="#">Món xào</a>
+                <a href="#">Món luộc</a>
+                <a href="#">Gà tây</a>
+                <br>
+                <h2>Author</h2>
+                <div class="users">
+                    {% for u in users %}
+                        <img src="{{media_url}}{{u.image }}">
+                    {% endfor %}
                 </div>
             </div>
-
-            <div class = "space"></div><br>
-            <div class = "price_layer">
-                <div class="trending">
-                    <h1>Trending</h1>
-                    <ul>
-                        <li>Step 1__________________</li>
-                        <li>Step 2</li>
-                        <li>Step 3</li>
-                        <li>Step 4</li>
-                        <li>Step 1</li>
-                        <li>Step 2</li>
-                        <li>Step 3</li>
-                        <li>Step 4</li>
-                        <li>Step 1</li>
-                        <li>Step 2</li>
-                        <li>Step 3</li>
-                        <li>Step 4</li>
-                        <li>Step 1</li>
-                        <li>Step 2</li>
-                        <li>Step 3</li>
-                        <li>Step 4</li>
-                        <li>Step 1</li>
-                        <li>Step 2</li>
-                        <li>Step 3</li>
-                        <li>Step 4</li>
-                    </ul>
-                </div>
-                <div class = "post">
-                    <img src="/static/Hub/resources/Cookhub_logo.png">
-                    <div>
-                        <h1>title</h1>
-                        <p>____________________________________________________________________</p>
-                    </div>
-                </div>
-                <div class = "post">
-                    <div>
-                        <h1>title</h1>
-                        <p>____________________________________________________________________</p>
-                    </div>
-                    <img src="/static/Hub/resources/Cookhub_logo.png">
-                </div>
-                <div class = "post">
-                    <img src="/static/Hub/resources/Cookhub_logo.png">
-                    <div>
-                        <h1>title</h1>
-                        <p>____________________________________________________________________</p>
-                    </div>
-                </div>
-                <div class = "post">
-                    <div>
-                        <h1>title</h1>
-                        <p>____________________________________________________________________</p>
-                    </div>
-                    <img src="/static/Hub/resources/Cookhub_logo.png">
+            <div class="trending">
+                <h1>Trending</h1>
+                <div class="chart">
+                    {{img_data | safe}}
                 </div>
             </div>
         </div>
 
-        <script>
-            document.getElementById("body").onscroll = function scrollFunction() {
-                var to_top = document.scrollingElement.scrollTop;
-                var x = "center";
-                var factor = 0.5;
-                var y = to_top * factor;
-                document.getElementById("bg").style.backgroundPosition = x + " " + y + "px";
-            }
-        </script>
-    </body>
-</html>
+        <div class = "menu_layer" id="menu_id">
+            {% for p in posts %}
+                <div class="post">
+                    <div class="post-header">
+                        <img src="{{media_url}}{{p.image }}">
+                        <ul class="post-info">
+                            <p>{{p.material}}</p>
+                        </ul>
+                    </div>
+                    <div class="post-footer">
+                        <a href="{{p.id}}">
+                            <h3>{{p.title}}</h3>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var counter = 1;
+        setInterval(function(){
+          document.getElementById('radio' + counter).checked = true;
+          counter++;
+          if(counter > 4){
+            counter = 1;
+          }
+        }, 5000);
+    </script>
+    <script src="/static/Hub/test.js"></script>
+{% endblock %}
