@@ -1,0 +1,26 @@
+.bg_search {
+    background: #111111;
+    padding: 50px;
+}
+
+.search_area {
+    display: block;
+    margin-left:auto;
+    margin-right: auto;
+    border-radius: 10px;
+    background: #F7DD91;
+    width: 90vw;
+    text-align:center;
+}
+
+.search_area input {
+    padding: 15px;
+}
+
+.menu_search {
+    background: #111111;
+    padding-top: 0;
+    border: 4px solid #fff;
+    border-style: dashed;
+    border-radius: 20px;
+}

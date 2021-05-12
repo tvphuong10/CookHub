@@ -4,7 +4,7 @@
     /* font-weight: 600; */
 }
 body {
-    background-color: #080A0F;
+    background-color: #111111;
 }
 
 .top_layer {
@@ -24,7 +24,7 @@ body {
 
 .begin {
     width: 100%;
-    background-color: #080A0F;
+    background-color: #111111;
     display: inline-block;
     margin-left: auto;
     margin-right: auto;
@@ -73,7 +73,7 @@ body {
     border-bottom-right-radius: 25px;
     display: block;
     background: #F5840E;
-    color: #080A0F;
+    color: #111111;
     width: 80%;
     height: 50px;
     display: flex;
@@ -133,7 +133,7 @@ body {
     height: 100%;
     border: none;
     font-size: 24px;
-    color: #080A0F;
+    color: #111111;
     padding: 12px;
     border-radius:10px;
 }
@@ -183,11 +183,11 @@ body {
 .add {
     width: 60px;
     height: 60px;
-    border: 4px solid #080A0F;
+    border: 4px solid #111111;
     box-shadow: 0px 0px 0px 2px #F5840E;
     outline: none;
     background-color: #F5840E;
-    color: #080A0F;
+    color: #111111;
     cursor: pointer;
     margin: 15px;
     border-radius: 50%;
@@ -216,11 +216,11 @@ body {
 .lb_submit {
     width: 130px;
     height: 50px;
-    border: 4px solid #080A0F;
+    border: 4px solid #111111;
     box-shadow: 0px 0px 0px 2px #F5840E;
     outline: none;
     background-color: #F5840E;
-    color: #080A0F;
+    color: #111111;
     cursor: pointer;
     font-size: 50px;
     display: block;

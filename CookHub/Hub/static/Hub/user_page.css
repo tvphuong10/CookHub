@@ -1,3 +1,41 @@
 .name-box {
-    
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 34;
+    text-shadow: #0d033b -0.3vw 0 0, #0d033b 0 0.3vw 0, #0d033b 0.3vw 0 0, #0d033b 0 -0.3vw 0;
+}
+
+.edit {
+    font-size: 24px;
+    text-decoration: none;
+}
+
+.edit:link {
+    color: #fff;
+}
+.edit:visited {
+    color: #fff;
+}
+
+.edit:hover {
+    color: #F5840E;
+}
+
+.sign {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 20px;
+    margin-bottom: 24px;
+}
+
+.share {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #fff;
+    border: solid #fff;
+    border-radius: 2px;
+    padding: 4px;
+}
+
+.share:hover {
+    color: #F5840E;
+    border: solid #F5840E;
 }

@@ -615,4 +615,31 @@ header {
         flex-wrap: nowrap;
         padding-right: 20px;
     }
+
+    .slide_img {
+        width:90%;
+        height:70%;
+        margin-left: 5vw;
+    }
+
+    .slide_text {
+        text-align:center;
+        margin-left: 5vw;
+        padding-left: 0;
+        padding-top: 0;
+        width: 90%;
+        height: 20%;
+    }
+
+    .slide_text h1 {
+        font-size: 28px;
+    }
+
+    .slide_text h2 {
+        display:none;
+    }
+
+    .slide_text h3 {
+        display:none;
+    }
 }

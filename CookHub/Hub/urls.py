@@ -23,5 +23,4 @@ urlpatterns = [
     path('admin_post/<int:id>', views.AdminPost.as_view()),
     path('like', views.like, name="like_url"),
     path('comment', views.comment, name="cmt_url"),
-    path('test', views.test),
 ]

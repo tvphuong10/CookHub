@@ -1,35 +1,43 @@
 {% extends "Hub/home_base.html" %}
 
 {% block content %}
+<link rel="stylesheet" href="/static/Hub/user_page.css">
 <div id = "bg">
 
     <section class="flat" style="text-align: center; color:#fff;" id="hero">
         <img src="{{media_url}}{{ user2.image }}" class="logo" alt="" style="border-radius: 50%; padding-top:0; margin-top:70px;">
         <h1 class="name-box" style="font-size: 50px">
             {{user2.username}}
+            {% if not guess %}
+                <a href="/user_edit" class=" edit fas fa-edit"></a>
+            {% endif %}
         </h1>
-        <p><i>{{user2.sign}}</i></p>
-        {% if not guess %}
-            <a href="/user_edit">Edit profile</a>
-        {% endif %}
-        <h2>post: {{post_count}} &ensp; &ensp; like: {{like_count}} &ensp; &ensp; view: {{view_count}}</h2>
-        <br>
-        <a class="fas fa-share" style="font-size: 20px" href="#"></a>
+        <p class="sign"><i>{{user2.sign}}</i></p>
+        <h2><i class="far fa-clipboard"></i> {{post_count}} &ensp; &ensp;
+            <i class="fas fa-thumbs-up"></i> {{like_count}} &ensp; &ensp;
+            <i class="far fa-eye"></i> {{view_count}}
+            <a class="share fas fa-share" style="font-size: 20px" href="#"></a>
+        </h2>
     </section>
 
-    <section style="background: #e3e9ff;">
-        <div>
-            {% for post in posts %}
-            <div style="width: 60%;">
-                <a style="font-size: 40px;" href="/{{post.id}}">{{post.title}}</a>
-                <p style="font-size: 20px;">{{post.description}}</p>
-                <p style="font-size: 20px;">{{post.material}}</p>
-            </div>
-            <img src="{{media_url}}{{ post.image }}" alt="img"
-                 style="width:25%;
-                 height:auto;
-                 border-radius: 2%;">
+    <section class="price_layer" style="background: #080A0F;">
+        <div class = "menu_layer" id="menu_id" style="padding-top: 0; background: #080A0F;">
+            {% for p in posts %}
+                <div class="post">
+                    <div class="post-header">
+                        <img src="{{media_url}}{{p.image }}">
+                        <ul class="post-info">
+                            <p>{{p.material}}</p>
+                        </ul>
+                    </div>
+                    <div class="post-footer">
+                        <a href="/{{p.id}}">
+                            <h3>{{p.title}}</h3>
+                        </a>
+                    </div>
+                </div>
             {% endfor %}
+
         </div>
     </section>
 </div>

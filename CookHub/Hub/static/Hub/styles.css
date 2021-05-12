@@ -47,23 +47,6 @@ p{
     font-size: 1.6rem;
 }
 
-.container{
-    width: 100%;
-    max-width: 122.5rem;
-    margin: 0 auto;
-    padding: 0 2.4rem;
-}
-
-
-header{
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    background-image: linear-gradient(to bottom,rgba(0,0,0,.5),transparent);
-}
-
 .nav{
     height: 7.2 rem;
     display: flex;
