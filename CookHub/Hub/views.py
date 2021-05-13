@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout, decorators
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
-
+import pandas as pd
 from .models import *
 from .forms import RegistrationForm, ChangeInformationForm
 from django.core.exceptions import ObjectDoesNotExist
@@ -73,9 +73,21 @@ class HomeView2(ViewBase):
         post_ = Post.objects.all()
 
 
-        x = [1, 2, 3, 4, 5, 1, 2, 3, 4, 5]
-        y = [2, 4, 3, 0, 6, 4, 3, 4, 4, 4]
-        z = ["t", "t", "t", "t", "t", "n", "n", "n", "n", "n"]
+        x = []
+        y = []
+        z = []
+
+        for day in range(20):
+            for i in range(3):
+                x.append(date.today() - timedelta(days=day))
+                v =View.objects.filter(post_id=offer_[i].post_id, date=date.today() - timedelta(days=day))
+                count = 0
+                for v_ in v:
+                    count += v_.count
+
+                y.append(count)
+                z.append(offer_[i].post_id.title)
+
         fig = px.line({"day": x, "view": y, "post": z}, x="day", y="view", color='post',
                       template="plotly_dark")
 

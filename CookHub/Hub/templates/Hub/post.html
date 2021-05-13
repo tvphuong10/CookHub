@@ -2,6 +2,7 @@
 {% block content %}
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <link rel="stylesheet" href="/static/Hub/styles.css">
+    <link rel="stylesheet" href="/static/Hub/post.css">
     <script>
         function like(ele) {
             $.ajax({
@@ -77,14 +78,8 @@
         <br><br><br><br>
     </section>
 
-    <div class="trending" style="float:left; color:#111111; width: 60%; padding: 0;">
-        <div style="width:100%;
-        border-bottom: 3px solid #111111;
-        border-bottom-style: dashed;
-        padding: 20px;
-        background: #F7DD91;
-        border-top-right-radius:18px;
-        border-top-left-radius:18px;">
+    <div class="trending body-area">
+        <div class="header-part">
             <p style="font-size: 50px; ">Thành phần</p>
             <h3>
                 <p style="font-size: 20px; color: #111111;">{{post.material}}</p>
@@ -102,40 +97,43 @@
             {% endfor %}
         </div>
         <br><br><br><br>
-        <div style="width:100%;
-        border-top: 3px solid #111111;
-        border-top-style: dashed;
-        padding: 20px;
-        background: #F7DD91;
-        border-bottom-right-radius:18px;
-        border-bottom-left-radius:18px;">
-            {% if user.username %}
-                {% if like %}
-                    <button id="like_button_id" onclick="like(this)">
-                        <p class="fa fa-heart" id="icon_id" style="font-size: 30px;"></p>
-                    </button>
-                {% else %}
-                        <button id="like_button_id" onclick="like(this)">
-                        <p class="far fa-heart" id="icon_id" style="font-size: 30px;"></p>
-                    </button>
+        <div class="footer-part">
+            <div style="padding-left: 20px;">
+                {% if user.username %}
+                    {% if like %}
+                        <button id="like_button_id" onclick="like(this)" style="background: none; border:none; outline:none;">
+                            <p class="fa fa-heart" id="icon_id" style="font-size: 30px;"></p>
+                        </button>
+                    {% else %}
+                            <button id="like_button_id" onclick="like(this)" style="background: none; border:none; outline:none;">
+                            <p class="far fa-heart" id="icon_id" style="font-size: 30px; "></p>
+                        </button>
+                    {% endif %}
+                    <a id="like_num" style="color: #111111; margin-left: -20px;">{{like_num}}</a>
+                    {% if enable_edit %}
+                        <a href="/edit/{{post.id}}" style="background: none; border:none; outline:none; color: #111111"> &ensp; &ensp; &ensp;
+                            <p class="far fa-edit" style="font-size: 30px;"></p>
+                        </a>
+                    {% else %}
+                        <a href="/report/{{post.id}}" style="background: none; border:none; outline:none; color: #111111" class="button_scroll"> &ensp; &ensp;
+                            <p class="far fa-flag" style="font-size: 30px;"></p>
+                        </a>
+                    {% endif %}
                 {% endif %}
-                <a id="like_num">{{like_num}}</a>
-                {% if enable_edit %}
-                    <a href="/edit/{{post.id}}" class="button_scroll"> &ensp; &ensp; &ensp;
-                        <p class="far fa-edit" style="font-size: 30px;"></p>
-                    </a>
-                {% else %}
-                    <a href="/report/{{post.id}}" class="button_scroll"> &ensp; &ensp;
-                        <p class="far fa-flag" style="font-size: 30px;"></p>
-                    </a>
-                {% endif %}
-            {% endif %}
+            </div>
             <div id="cmt_area">
                 {% if user.username %}
-                <input type="text" name="cmt" id="comment" onkeypress="cmt(event)" placeholder="Say something">
+                <input type="text" name="cmt" id="comment" onkeypress="cmt(event)" placeholder="Say something" style="
+                width: 80%;
+                background: #fff;
+                border-radius: 20px;
+                outline: none;
+                padding: 3px 3px 3px 10px;
+                font-size: 28px;
+                margin: 20px;">
                 {% endif %}
                 {% for cmt in comments %}
-                    <p><b>{{cmt.user_id.username}} :</b> {{cmt.body}}</p>
+                    <p style="width: 100%; color: #111111; margin-left: 20px;"><b>{{cmt.user_id.username}} :</b> {{cmt.body}}</p>
                 {% endfor %}
             </div>
         </div>
@@ -145,47 +143,34 @@
 
 
 
-    <section class="trending" style="background: #e3e9ff; width: 30%; color: #111111; text-align: center; padding-top: 0;">
-        <p style="font-size: 40px;">{{post.user_id.username}}</p>
+    <section class="trending user-area">
+        <p style="font-size: 50px;">{{post.user_id.username}}</p>
         <img src="{{media_url}}{{ post.user_id.image }}"
              alt="img"
              style="width:auto;
-             height:80px;
+             height:150px;
              border-radius:50%;
              box-shadow:5px 5px 20px -5px rgba(0, 0, 0, 0.5);">
-        <p><i id="1">{{post.user_id.sign}}</i></p>
+        <p><i id="1" style="font-size: 24px;">{{post.user_id.sign}}</i></p>
     </section>
 
-    <section class="trending" style="background: #e3e9ff; width: 30%; color: #111111">
-        <div class="product-center container" style="width: 90%; grid-template-columns: repeat(auto-fit,minmax(20rem, 30rem));">
-            {% for is_like, d in offers_zip %}
-            {% if d != post %}
-            <div class="product"  style="height: 38rem;">
-                <div class="product-header" style="height: 28rem;">
-                    <img src="{{media_url}}{{ d.image }}" alt="">
-                    <ul class="icons">
-                        {% if user.username %}
-                        <span>
-                            <button id="{{d.id}}" onclick="like(this)">
-                                {% if is_like %}
-                                <p class="fa fa-heart" id="icon_{{d.id}}" style="font-size: 30px;"></p>
-                                {% else %}
-                                <p class="far fa-heart" id="icon_{{d.id}}" style="font-size: 30px;"></p>
-                                {% endif %}
-                            </button>
-                        </span>
-                        <span><i class="far fa-comments"></i></span>
-                        {% endif %}
-                        <span><i class="fas fa-share"></i></span>
-                    </ul>
+    <section class="trending offer-area">
+       <div class = "menu_layer" id="menu_id" style="background: none; padding-top: 0">
+            {% for is_like, p in offers_zip %}
+            {% if p != post %}
+                <div class="post" style="display: block; margin-left:auto; margin-right: auto;">
+                    <div class="post-header">
+                        <img src="{{media_url}}{{p.image }}">
+                        <ul class="post-info">
+                            <p>{{p.material}}</p>
+                        </ul>
+                    </div>
+                    <div class="post-footer">
+                        <a href="{{p.id}}">
+                            <h3>{{p.title}}</h3>
+                        </a>
+                    </div>
                 </div>
-                <div class="product-footer">
-                    <a href="/{{d.id}}">
-                        <h3>{{d.title}}</h3>
-                    </a>
-
-                </div>
-            </div>
             {% endif %}
             {% endfor %}
         </div>

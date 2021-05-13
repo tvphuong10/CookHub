@@ -92,7 +92,7 @@
                 <h2>Author</h2>
                 <div class="users">
                     {% for u in users %}
-                        <img src="{{media_url}}{{u.image }}">
+                        <a href="/user_page/{{u.id}}"><img src="{{media_url}}{{u.image }}"></a>
                     {% endfor %}
                 </div>
             </div>

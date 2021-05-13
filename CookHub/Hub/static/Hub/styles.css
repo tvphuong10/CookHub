@@ -146,30 +146,6 @@ nav-link:hover{
     text-align: center;
 }
 
-.post{
-    width: 100%;
-    background: #e3e9ff;
-    align-items: center;
-    text-align: center;
-}
-
-.post input{
-    margin-bottom: 20px;
-    border: none;
-    width: 80%;
-    border-bottom: 1px solid #000066;
-    background: transparent;
-    outline: none;
-    height: 40px;
-    font-size: 16px;
-}
-
-.post div{
-    width: 70%;
-    background: #fff;
-    margin: auto;
-    box-shadow: 5px 5px 20px -5px rgba(0, 0, 0, 0.2);
-}
 
 .sub-headline{
     font-size: 8.5rem;
