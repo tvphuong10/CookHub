@@ -17,6 +17,12 @@ import urllib.parse
 # req là thông điệp từ client truyền vào
 
 
+def check_admin(user_):
+    if user_.username == 'yorovy':
+        return True
+    else:
+        return False
+
 def get_user(req):
     if req.user.username:                                       # nếu như có tên tài khoản (tức đã đăng nhập)
         try:
@@ -221,9 +227,13 @@ def create(req):
         new_post = Post()
         new_post.user_id = user_
         new_post.title = req.POST.get('dish')
+        if req.POST.get('dish') == '':
+            return render(req, 'Hub/error.html', {"error": 'dữ liệu nhập thiếu'})
         new_post.description = req.POST.get('des')
         new_post.image = req.FILES['image']
         new_post.material = req.POST.get('textField')
+        if req.POST.get('textField') == '':
+            return render(req, 'Hub/error.html', {"error": 'dữ liệu nhập thiếu'})
         new_post.save()
 
         num_step = req.POST.get('numberStep')
@@ -231,6 +241,8 @@ def create(req):
             new_step = Step()
             new_step.post_id = new_post
             new_step.body = req.POST.get('recipe' + str(n + 1))
+            if req.POST.get('recipe') == '':
+                return render(req, 'Hub/error.html', {"error": 'dữ liệu nhập thiếu'})
             new_step.image = req.FILES.get('anh' + str(n + 1))
             new_step.save()
 
@@ -270,10 +282,6 @@ class PostView(ViewBase):
         offers = Post.objects.filter(user_id=post_.user_id)
         is_liked = []
 
-        if user_ != 0:
-            for o in offers:
-                is_liked.append(Like.objects.filter(post_id=o, user_id=user_.id).exists())
-
         enable_edit = False
         if post_.user_id == user_:
             enable_edit = True
@@ -285,7 +293,7 @@ class PostView(ViewBase):
             "like": lk,
             "like_num": lk_num,
             "comments": cmt,
-            "offers_zip": zip(is_liked, offers),
+            "offers_zip": offers,
             "enable_edit": enable_edit,
             "media_url": settings.MEDIA_URL
         }
@@ -352,6 +360,8 @@ class User_page(ViewBase):
 
         return render(req, 'Hub/user_page.html',
                       {'form': form,
+                       'check_admin': check_admin(user_),
+                       'is_admin': check_admin(user2),
                        'user_': user_,
                        'user2': user2,
                        'posts': post_,
@@ -367,6 +377,9 @@ class AdminSite(ViewBase):
         user_ = get_user(req)
         if user_ == -1 or user_ == 0:
             return render(req, 'Hub/error.html', {"error": 'tài khoản đăng ký lỗi'})
+
+        if not check_admin(user_):
+            return render(req, 'Hub/error.html', {"error": 'bạn phải là admin'})
 
         total_view = 0
         total_like = Like.objects.filter().count()

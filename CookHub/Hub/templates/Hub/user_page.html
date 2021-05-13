@@ -11,6 +11,11 @@
             {% if not guess %}
                 <a href="/user_edit" class=" edit fas fa-edit"></a>
             {% endif %}
+            {% if check_admin %}
+            {% if not is_admin %}
+                <a href="#" class="edit fas fa-user-cog"></a>
+            {% endif %}
+            {% endif %}
         </h1>
         <p class="sign"><i>{{user2.sign}}</i></p>
         <h2><i class="far fa-clipboard"></i> {{post_count}} &ensp; &ensp;
