@@ -1,6 +1,7 @@
 {% extends "Hub/home_base.html" %}
 {% block content %}
-
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/static/Hub/styles.css">
     <script>
         function like(ele) {
             $.ajax({
@@ -72,17 +73,24 @@
             <h1 class="name-box" style="font-size: 50px; color: #fff">{{post.title}}</h1><br>
             <h2 class="name-box" style="font-size: 20px; color: #ccc">{{post.description}}</h2>
             <br>
-            <h3>
-                <br>
-                <p style="font-size: 30px; color: #fff;">{{post.material}}</p>
-                <br>
-            </h3>
         </div>
         <br><br><br><br>
     </section>
 
-    <section class="post">
-        <div>
+    <div class="trending" style="float:left; color:#111111; width: 60%; padding: 0;">
+        <div style="width:100%;
+        border-bottom: 3px solid #111111;
+        border-bottom-style: dashed;
+        padding: 20px;
+        background: #F7DD91;
+        border-top-right-radius:18px;
+        border-top-left-radius:18px;">
+            <p style="font-size: 50px; ">Thành phần</p>
+            <h3>
+                <p style="font-size: 20px; color: #111111;">{{post.material}}</p>
+            </h3>
+        </div>
+        <div style="padding: 20px;">
             <p style="font-size: 50px;">Cách nấu {{post.title}}</p>
             <br><br>
             {% for step in steps %}
@@ -93,6 +101,51 @@
                 <br><br>
             {% endfor %}
         </div>
+        <br><br><br><br>
+        <div style="width:100%;
+        border-top: 3px solid #111111;
+        border-top-style: dashed;
+        padding: 20px;
+        background: #F7DD91;
+        border-bottom-right-radius:18px;
+        border-bottom-left-radius:18px;">
+            {% if user.username %}
+                {% if like %}
+                    <button id="like_button_id" onclick="like(this)">
+                        <p class="fa fa-heart" id="icon_id" style="font-size: 30px;"></p>
+                    </button>
+                {% else %}
+                        <button id="like_button_id" onclick="like(this)">
+                        <p class="far fa-heart" id="icon_id" style="font-size: 30px;"></p>
+                    </button>
+                {% endif %}
+                <a id="like_num">{{like_num}}</a>
+                {% if enable_edit %}
+                    <a href="/edit/{{post.id}}" class="button_scroll"> &ensp; &ensp; &ensp;
+                        <p class="far fa-edit" style="font-size: 30px;"></p>
+                    </a>
+                {% else %}
+                    <a href="/report/{{post.id}}" class="button_scroll"> &ensp; &ensp;
+                        <p class="far fa-flag" style="font-size: 30px;"></p>
+                    </a>
+                {% endif %}
+            {% endif %}
+            <div id="cmt_area">
+                {% if user.username %}
+                <input type="text" name="cmt" id="comment" onkeypress="cmt(event)" placeholder="Say something">
+                {% endif %}
+                {% for cmt in comments %}
+                    <p><b>{{cmt.user_id.username}} :</b> {{cmt.body}}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    </section>
+
+
+
+    <section class="trending" style="background: #e3e9ff; width: 30%; color: #111111; text-align: center; padding-top: 0;">
         <p style="font-size: 40px;">{{post.user_id.username}}</p>
         <img src="{{media_url}}{{ post.user_id.image }}"
              alt="img"
@@ -101,39 +154,9 @@
              border-radius:50%;
              box-shadow:5px 5px 20px -5px rgba(0, 0, 0, 0.5);">
         <p><i id="1">{{post.user_id.sign}}</i></p>
-        <br><br><br><br>
-        {% if user.username %}
-            {% if like %}
-                <button id="like_button_id" onclick="like(this)">
-                    <p class="fa fa-heart" id="icon_id" style="font-size: 30px;"></p>
-                </button>
-            {% else %}
-                    <button id="like_button_id" onclick="like(this)">
-                    <p class="far fa-heart" id="icon_id" style="font-size: 30px;"></p>
-                </button>
-            {% endif %}
-            <a id="like_num">{{like_num}}</a>
-            {% if enable_edit %}
-                <a href="/edit/{{post.id}}" class="button_scroll"> &ensp; &ensp; &ensp;
-                    <p class="far fa-edit" style="font-size: 30px;"></p>
-                </a>
-            {% else %}
-                <a href="/report/{{post.id}}" class="button_scroll"> &ensp; &ensp;
-                    <p class="far fa-flag" style="font-size: 30px;"></p>
-                </a>
-            {% endif %}
-        {% endif %}
-        <div id="cmt_area">
-            {% if user.username %}
-            <input type="text" name="cmt" id="comment" onkeypress="cmt(event)" placeholder="Say something">
-            {% endif %}
-            {% for cmt in comments %}
-                <p><b>{{cmt.user_id.username}} :</b> {{cmt.body}}</p>
-            {% endfor %}
-        </div>
     </section>
 
-    <section class="section featured" style="background: #e3e9ff;">
+    <section class="trending" style="background: #e3e9ff; width: 30%; color: #111111">
         <div class="product-center container" style="width: 90%; grid-template-columns: repeat(auto-fit,minmax(20rem, 30rem));">
             {% for is_like, d in offers_zip %}
             {% if d != post %}
@@ -161,33 +184,12 @@
                         <h3>{{d.title}}</h3>
                     </a>
 
-                    <div class="rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h4 class="price">{{d.date}}</h4>
                 </div>
             </div>
             {% endif %}
             {% endfor %}
         </div>
     </section>
-
-    <footer>
-        <div style="width: 50%; display: inline-block;">
-            <h1>™ 2021 - Bản quyền của 10xu studio - K64 CC</h1>
-            <h2>Đại học Công nghệ - Đại học Quốc gia Hà Nội</h2>
-        </div>
-        <div style="width: 49%; display: inline-block;">
-            <h1>Liên hệ với chúng tôi</h1>
-            <h3><b>Hotline: 1902-0397</b></h3>
-            <h3>Email:<a>tvphuong2@yahoo.com.vn</a></h3>
-            <h3>Facebook:<a>https://www.facebook.com/huyen.thoai.2001/</a></h3>
-        </div>
-    </footer>
 
     <script src="/static/Hub/main.js"></script>
 {% endblock %}

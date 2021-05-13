@@ -11,7 +11,7 @@ from datetime import date, timedelta
 from django.views import View as ViewBase
 from plotly.offline import plot
 from plotly.graph_objs import Scatter
-# import plotly.express as px
+import plotly.express as px
 import urllib.parse
 
 # req là thông điệp từ client truyền vào
@@ -76,16 +76,16 @@ class HomeView2(ViewBase):
         x = [1, 2, 3, 4, 5, 1, 2, 3, 4, 5]
         y = [2, 4, 3, 0, 6, 4, 3, 4, 4, 4]
         z = ["t", "t", "t", "t", "t", "n", "n", "n", "n", "n"]
-        # fig = px.line({"day": x, "view": y, "post": z}, x="day", y="view", color='post',
-        #               template="plotly_dark")
+        fig = px.line({"day": x, "view": y, "post": z}, x="day", y="view", color='post',
+                      template="plotly_dark")
 
-        # plot_div = plot(fig, output_type='div')
+        plot_div = plot(fig, output_type='div')
 
         return render(req, 'Hub/test.html', {
             "user_": user_,
             "offer_first": offer_[0],
             "offers": offer_[1:],
-            # "img_data": plot_div,
+            "img_data": plot_div,
             "posts": post_,
             "users": users,
             "media_url": settings.MEDIA_URL
@@ -189,7 +189,15 @@ class EditPost(ViewBase):
         form = ChangeInformationForm(instance=user_)
         post_ = Post.objects.get(id=id)
         steps = Step.objects.filter(post_id=post_)
-        return render(req, 'Hub/edit_post.html', {"post": post_, "steps": steps})
+        if req.method == 'POST':
+            print(1 + req)
+        return render(req, 'Hub/edit_post.html', {
+            "user_": user_,
+            "post": post_,
+            "steps": zip(steps, range(1, len(steps) + 1)),
+            "len": len(steps),
+            "media_url": settings.MEDIA_URL
+        })
 
 
 def create(req):
@@ -583,3 +591,15 @@ def comment(req):
         cmt.save()
         return JsonResponse({"valid": True}, status=200)
     return JsonResponse({}, status=400)
+
+
+def test(req):
+    x = [1, 2, 3, 4, 5, 1, 2, 3, 4, 5]
+    y = [2, 4, 3, 0, 6, 4, 3, 4, 4, 4]
+    z = ["t", "t", "t", "t", "t", "n", "n", "n", "n", "n"]
+    fig = px.line({"day": x, "view": y, "post": z}, x="day", y="view", color='post',
+                     template="plotly_dark")
+
+    plot_div = plot(fig, output_type='div')
+
+    return render(req, 'Hub/test.html', {"img_data": plot_div})

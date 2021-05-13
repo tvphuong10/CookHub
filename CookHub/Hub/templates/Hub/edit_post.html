@@ -1,52 +1,102 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CookHub</title>
-  <!-- google font -->
-  <link href="https://fonts.googleapis.com/css2?family=Mulish&display=swap" rel="stylesheet">
-  <!-- custom css -->
-  <link href="/static/Hub/create.css" rel="stylesheet">
-</head>
-<body>
-    <div id="wrapper">
-        <div class="invitation">
-            <div>
-                <input type="text" style="font-size: 40px; border: none; color: #575757" value="{{post.title}}">
-                <br><br>
-                <input type="text" style="font-size: 20px; border: none; color: #575757" value="{{post.description}}">
-                <br><br>
-                <input type="text" style="font-size: 20px; border: none; color: #575757" value="{{post.material}}">
+{% extends "Hub/home_base.html" %}
+
+{% block content %}
+    <link rel="stylesheet" href="/static/Hub/create_post.css">
+    <script >
+        var m = {{len}} + 1;
+        function myFunction() {
+            var x = document.createElement("INPUT");
+            x.setAttribute("type", "text");
+            x.setAttribute("onkeypress", "return searchKeyPress(event);")
+            x.className = "tete";
+            x.id = "id_of_input";
+            x.name = "recipe" + m;
+
+            var y = document.createElement("br");
+            var h = document.createTextNode("Step " + m);
+            var node = document.getElementById("re");
+
+            var l = document.createElement("input");
+            l.setAttribute("type", "file");
+            l.className ="meme";
+            l.name="anh" + m;
+
+            var cc = document.createElement('div');
+            cc.id ='buoc' + m;
+            cc.className = "steps";
+            node.appendChild(cc);
+            cc.appendChild(h);
+            cc.appendChild(x);
+            cc.appendChild(y);
+            cc.appendChild(l);
+            cc.appendChild(y);
+
+            document.getElementById('num').setAttribute("value", m);
+            m++;
+        }
+
+        function searchKeyPress(e)
+        {
+            e = e || window.event;
+            if (e.keyCode == 13)
+            {
+                document.getElementById('btnSearch').click();
+                return false;
+            }
+            return true;
+        }
+        function clicked(e)
+        {
+            if(!confirm('Are you sure?')) {
+                e.preventDefault();
+            }
+        }
+    </script>
+    <form action="" method="post" enctype="multipart/form-data">
+        {%csrf_token%}
+        <div class="top_layer">
+            <div class="getName">
+               <div class="name">
+                    <input type="text" name="dish" id="name-dish" placeholder="Title..." value="{{post.title}}" >
+                </div>
             </div>
-            <header id="header">
-                <h1>Your steps</h1>
-            </header>
-            <main class="main">
-                <form id="inviteForm" method="POST">
-                    <input type="text" name="name" placeholder="Write step">
-                    <button type="submit" name="submit" value="submit">Submit</button>
-                </form>
 
-            <!-- <div class="showHide">
-              <label>Hide those who haven't responded</label>
-              <input type="checkbox">
-            </div>  -->
+            <input type="text" id="describe" name="des" placeholder="Description...." value="{{post.description}}"/>
 
-                <ul id="invitedList">
-                    {% for step in steps %}
-                    <li>
-                        <span>{{step.body}}</span>
-                        <label>Confirmed<input type="checkbox"></label>
-                        <button>edit</button>
-                        <input type="file"></button>
-                        <button>remove</button>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </main>
+            <div class="begin">
+                <div class="image">
+                <label id="label-camera" for="file-input">
+                    <img src="{{media_url}}{{post.image}}" style="max-width: 70%; display:block; margin-left:auto; margin-right:auto; border-radius: 10px;">
+                </label>
+                <input id="file-input" type="file" name="image"/>
+                </div>
+            </div>
+
+            <div class="Ingredients">
+                <textarea name="textField" id="inText" cols="30" rows="10" placeholder="ingredients...">{{post.material}}</textarea>
+            </div>
         </div>
-    </div>
-  <!-- custom js -->
-    <script type="text/javascript" src="/static/Hub/create.js"></script>
-</body>
-</html>
+
+        <div class="recipe-End">
+            <div class="recipe" id="re">
+                <input type="number" id="num" name="numberStep" placeholder="0" value="{{len}}"/>
+                <p>Step</p>
+                <br>
+                {% for s, i in steps %}
+                <div id="buoc{{i}}" class="steps">Step {{i}}<input type="text" onkeypress="return searchKeyPress(event);" class="tete" id="id_of_input" name="recipe{{i}}" value="{{s.body}}">
+
+                    <input type="file" class="meme" name="anh{{i}}" >
+                    <img src="{{media_url}}{{s.image}}" style="max-height: 100px; margin-top: 10px; border-radius: 6px;">
+                    <br>
+                </div>
+                {% endfor %}
+            </div>
+            <input type="button" class="add" id="btnSearch" value="+" onclick="myFunction()"/>
+
+            <label for="submit" class="lb_submit">
+                <i class="fa fa-check"></i>
+            </label>
+            <input type="submit" class="but" id="submit" onclick="return confirm('Are you sure?')" value="POST"/>
+        </div>
+    </form>
+{% endblock %}
